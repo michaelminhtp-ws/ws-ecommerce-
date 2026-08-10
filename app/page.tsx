@@ -1,13 +1,32 @@
 'use client';
 
+type IconName =
+  | 'location'
+  | 'briefcase'
+  | 'clock'
+  | 'home'
+  | 'building'
+  | 'calendar'
+  | 'graduation'
+  | 'card'
+  | 'user'
+  | 'users'
+  | 'chart'
+  | 'rocket'
+  | 'clipboard'
+  | 'gift'
+  | 'shield'
+  | 'heart'
+  | 'age';
+
 const features = [
-  ['📍', 'Cała Polska'],
-  ['💼', 'Pełny etat'],
-  ['🕒', 'Część etatu'],
-  ['🏠', 'Zdalna'],
-  ['🏢', 'Hybrydowa'],
-  ['📅', 'Elastyczny grafik'],
-  ['🎓', 'Szkolenie'],
+  { icon: 'location' as IconName, label: 'Cała Polska' },
+  { icon: 'briefcase' as IconName, label: 'Pełny etat' },
+  { icon: 'clock' as IconName, label: 'Część etatu' },
+  { icon: 'home' as IconName, label: 'Zdalna' },
+  { icon: 'building' as IconName, label: 'Hybrydowa' },
+  { icon: 'calendar' as IconName, label: 'Elastyczny grafik' },
+  { icon: 'graduation' as IconName, label: 'Szkolenie' },
 ];
 
 const tasks = [
@@ -29,12 +48,12 @@ const requirements = [
 ];
 
 const benefits = [
-  ['💼', 'Pełny etat / część etatu'],
-  ['🏠', 'Praca zdalna lub hybrydowa'],
-  ['🎓', 'Szkolenie i wdrożenie'],
-  ['👥', 'Wsparcie zespołu'],
-  ['📈', 'Możliwość premii'],
-  ['🚀', 'Szybki start'],
+  { icon: 'briefcase' as IconName, label: 'Pełny etat / część etatu' },
+  { icon: 'home' as IconName, label: 'Praca zdalna lub hybrydowa' },
+  { icon: 'graduation' as IconName, label: 'Szkolenie i wdrożenie' },
+  { icon: 'users' as IconName, label: 'Wsparcie zespołu' },
+  { icon: 'chart' as IconName, label: 'Możliwość premii' },
+  { icon: 'rocket' as IconName, label: 'Szybki start' },
 ];
 
 const reviews = [
@@ -80,18 +99,255 @@ const faqs = [
   ],
 ];
 
-function WhatsAppIcon() {
+function BaseIcon({
+  children,
+  size = 20,
+  color = 'currentColor',
+}: {
+  children: React.ReactNode;
+  size?: number;
+  color?: string;
+}) {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className="waIcon">
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      style={{
+        display: 'inline-block',
+        flexShrink: 0,
+        color,
+        verticalAlign: 'middle',
+      }}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {children}
+    </svg>
+  );
+}
+
+function Icon({
+  name,
+  size = 20,
+  color = 'currentColor',
+}: {
+  name: IconName;
+  size?: number;
+  color?: string;
+}) {
+  switch (name) {
+    case 'location':
+      return (
+        <BaseIcon size={size} color={color}>
+          <path d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10Z" />
+          <circle cx="12" cy="11" r="2.2" />
+        </BaseIcon>
+      );
+
+    case 'briefcase':
+      return (
+        <BaseIcon size={size} color={color}>
+          <rect x="3" y="7" width="18" height="12" rx="2" />
+          <path d="M9 7V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8V7" />
+          <path d="M3 11.5h18" />
+        </BaseIcon>
+      );
+
+    case 'clock':
+      return (
+        <BaseIcon size={size} color={color}>
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M12 7.5v4.8l3.2 1.8" />
+        </BaseIcon>
+      );
+
+    case 'home':
+      return (
+        <BaseIcon size={size} color={color}>
+          <path d="M4 10.5 12 4l8 6.5" />
+          <path d="M6.5 9.8V20h11V9.8" />
+          <path d="M10 20v-5h4v5" />
+        </BaseIcon>
+      );
+
+    case 'building':
+      return (
+        <BaseIcon size={size} color={color}>
+          <rect x="6" y="3.5" width="12" height="17" rx="1.8" />
+          <path d="M9 7h1M14 7h1M9 10.5h1M14 10.5h1M9 14h1M14 14h1" />
+          <path d="M11 20.5v-3h2v3" />
+        </BaseIcon>
+      );
+
+    case 'calendar':
+      return (
+        <BaseIcon size={size} color={color}>
+          <rect x="3" y="5.5" width="18" height="15" rx="2" />
+          <path d="M8 3.5v4M16 3.5v4M3 9.5h18" />
+        </BaseIcon>
+      );
+
+    case 'graduation':
+      return (
+        <BaseIcon size={size} color={color}>
+          <path d="M3 9.5 12 5l9 4.5-9 4.5-9-4.5Z" />
+          <path d="M7 11.5v3.2c0 1.8 2.2 3.3 5 3.3s5-1.5 5-3.3v-3.2" />
+        </BaseIcon>
+      );
+
+    case 'card':
+      return (
+        <BaseIcon size={size} color={color}>
+          <rect x="3" y="5.5" width="18" height="13" rx="2.5" />
+          <path d="M3 10h18" />
+          <path d="M7 15h3.5" />
+        </BaseIcon>
+      );
+
+    case 'user':
+      return (
+        <BaseIcon size={size} color={color}>
+          <circle cx="12" cy="8" r="3.2" />
+          <path d="M5.5 19c1.3-2.6 3.7-4 6.5-4s5.2 1.4 6.5 4" />
+        </BaseIcon>
+      );
+
+    case 'users':
+      return (
+        <BaseIcon size={size} color={color}>
+          <circle cx="9" cy="9" r="2.5" />
+          <circle cx="16.2" cy="10" r="2.1" />
+          <path d="M4.5 18c1-2.2 2.9-3.4 4.9-3.4s3.9 1.2 4.9 3.4" />
+          <path d="M14 17.8c.7-1.5 2-2.3 3.5-2.3 1.3 0 2.4.6 3 1.7" />
+        </BaseIcon>
+      );
+
+    case 'chart':
+      return (
+        <BaseIcon size={size} color={color}>
+          <path d="M5 19h14" />
+          <path d="M7 16v-4" />
+          <path d="M12 16V9" />
+          <path d="M17 16v-7" />
+        </BaseIcon>
+      );
+
+    case 'rocket':
+      return (
+        <BaseIcon size={size} color={color}>
+          <path d="M14.5 4.5c2.8.3 5 2.5 5.3 5.3-1.1 1.8-2.8 3.8-5 5.9l-3.6-3.6c2.1-2.2 4.1-3.9 5.9-5Z" />
+          <path d="M11.2 12.1 8.6 14.7" />
+          <path d="M9 18l-3 .8.8-3L9 18Z" />
+          <path d="M13.8 8.2h.01" />
+        </BaseIcon>
+      );
+
+    case 'clipboard':
+      return (
+        <BaseIcon size={size} color={color}>
+          <rect x="5" y="5.5" width="14" height="15" rx="2" />
+          <path d="M9 5.5v-1a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 4.5v1" />
+          <path d="M8.5 10h7M8.5 13.5h7M8.5 17h4.5" />
+        </BaseIcon>
+      );
+
+    case 'gift':
+      return (
+        <BaseIcon size={size} color={color}>
+          <rect x="4" y="9" width="16" height="11" rx="2" />
+          <path d="M12 9v11M4 13h16" />
+          <path d="M12 9H8.8A1.8 1.8 0 1 1 10 5.7L12 9Z" />
+          <path d="M12 9h3.2A1.8 1.8 0 1 0 14 5.7L12 9Z" />
+        </BaseIcon>
+      );
+
+    case 'shield':
+      return (
+        <BaseIcon size={size} color={color}>
+          <path d="M12 3.5 19 6v5.5c0 4.2-2.7 7.4-7 9-4.3-1.6-7-4.8-7-9V6l7-2.5Z" />
+        </BaseIcon>
+      );
+
+    case 'heart':
+      return (
+        <BaseIcon size={size} color={color}>
+          <path d="M12 20s-6.5-4.3-8.3-8a4.8 4.8 0 0 1 8.3-4.7A4.8 4.8 0 0 1 20.3 12C18.5 15.7 12 20 12 20Z" />
+        </BaseIcon>
+      );
+
+    case 'age':
+      return (
+        <BaseIcon size={size} color={color}>
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M9 9.5h2v5" />
+          <path d="M13 11.5c0-1.2.9-2 2.1-2 1.1 0 1.9.7 1.9 1.8 0 .9-.4 1.4-1.4 2.1l-1.5 1.1h3" />
+        </BaseIcon>
+      );
+
+    default:
+      return null;
+  }
+}
+
+function WhatsAppIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      className="waIcon"
+      style={{ display: 'inline-block', flexShrink: 0 }}
+    >
       <path
         fill="currentColor"
-        d="M19.11 17.35c-.31-.16-1.84-.91-2.13-1.01-.28-.1-.49-.16-.7.16-.21.31-.8 1.01-.98 1.22-.18.21-.36.23-.67.08-.31-.16-1.31-.48-2.5-1.54-.92-.82-1.55-1.84-1.73-2.15-.18-.31-.02-.48.14-.64.14-.14.31-.36.47-.54.16-.18.21-.31.31-.52.1-.21.05-.39-.03-.54-.08-.16-.7-1.69-.96-2.31-.25-.61-.51-.53-.7-.54h-.6c-.21 0-.54.08-.83.39-.28.31-1.09 1.07-1.09 2.6s1.12 3.02 1.27 3.23c.16.21 2.2 3.36 5.33 4.71.74.32 1.32.51 1.77.65.74.24 1.42.2 1.96.12.6-.09 1.84-.75 2.1-1.48.26-.73.26-1.35.18-1.48-.08-.13-.28-.21-.59-.36Z"
+        d="M16.02 3.2c-6.95 0-12.6 5.6-12.6 12.5 0 2.22.58 4.38 1.69 6.28L3.3 28.8l6.98-1.82a12.66 12.66 0 0 0 5.74 1.38h.01c6.95 0 12.59-5.61 12.59-12.51 0-3.34-1.31-6.48-3.69-8.84A12.52 12.52 0 0 0 16.02 3.2Zm0 22.95h-.01a10.46 10.46 0 0 1-5.34-1.47l-.38-.22-4.14 1.08 1.11-4.02-.24-.41a10.25 10.25 0 0 1-1.57-5.42c0-5.69 4.67-10.32 10.42-10.32 2.78 0 5.38 1.08 7.35 3.04a10.23 10.23 0 0 1 3.06 7.29c0 5.7-4.67 10.33-10.43 10.33Z"
       />
       <path
         fill="currentColor"
-        d="M16.02 3.2a12.63 12.63 0 0 0-10.84 19.1L3.4 28.8l6.65-1.74a12.62 12.62 0 1 0 5.97-23.86Zm0 22.96c-1.88 0-3.72-.51-5.32-1.47l-.38-.23-3.95 1.03 1.05-3.85-.25-.4a10.34 10.34 0 1 1 8.85 4.92Z"
+        d="M21.9 18.54c-.33-.16-1.95-.95-2.25-1.06-.3-.11-.52-.16-.74.17-.22.33-.86 1.06-1.05 1.28-.19.22-.39.25-.72.08-.33-.16-1.39-.51-2.65-1.63-.98-.87-1.65-1.95-1.84-2.28-.19-.33-.02-.5.14-.66.15-.15.33-.39.5-.58.17-.19.22-.33.33-.55.11-.22.06-.41-.03-.58-.09-.16-.74-1.78-1.02-2.44-.27-.65-.54-.56-.74-.57-.18-.01-.39-.01-.6-.01s-.56.08-.85.41c-.3.33-1.14 1.11-1.14 2.71 0 1.59 1.16 3.13 1.32 3.35.17.22 2.27 3.47 5.49 4.87.77.33 1.37.53 1.84.68.77.24 1.47.21 2.02.13.62-.09 1.95-.79 2.22-1.56.27-.77.27-1.43.19-1.56-.08-.14-.3-.22-.63-.38Z"
       />
     </svg>
+  );
+}
+
+function SectionTitle({
+  icon,
+  title,
+}: {
+  icon: IconName;
+  title: string;
+}) {
+  return (
+    <h2
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+      }}
+    >
+      <span
+        style={{
+          width: 32,
+          height: 32,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '10px',
+          background: '#eef8f3',
+          color: '#23b26d',
+          flexShrink: 0,
+        }}
+      >
+        <Icon name={icon} size={18} />
+      </span>
+      {title}
+    </h2>
   );
 }
 
@@ -157,17 +413,31 @@ export default function Home() {
         </p>
 
         <div className="chips">
-          {features.map(([icon, label]) => (
-            <span className="chip" key={label}>
-              <span>{icon}</span>
-              {label}
+          {features.map((item) => (
+            <span
+              className="chip"
+              key={item.label}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <Icon name={item.icon} size={16} color="#6c7ba1" />
+              {item.label}
             </span>
           ))}
         </div>
 
         <div className="salaryBox">
           <div className="salaryMain">
-            <div className="salaryIcon">💳</div>
+            <div
+              className="salaryIcon"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#23b26d',
+              }}
+            >
+              <Icon name="card" size={22} />
+            </div>
 
             <div>
               <strong>6 000–7 500 PLN</strong>
@@ -187,7 +457,16 @@ export default function Home() {
 
       <section className="quickStats">
         <div className="statCard">
-          <span>💳</span>
+          <span
+            style={{
+              display: 'inline-flex',
+              color: '#23b26d',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon name="card" size={22} />
+          </span>
           <div>
             <strong>6 000–7 500 PLN</strong>
             <small>brutto / miesiąc</small>
@@ -195,7 +474,16 @@ export default function Home() {
         </div>
 
         <div className="statCard">
-          <span>👤</span>
+          <span
+            style={{
+              display: 'inline-flex',
+              color: '#4f7cff',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon name="user" size={22} />
+          </span>
           <div>
             <strong>Brak</strong>
             <small>doświadczenia</small>
@@ -203,7 +491,16 @@ export default function Home() {
         </div>
 
         <div className="statCard">
-          <span>🎂</span>
+          <span
+            style={{
+              display: 'inline-flex',
+              color: '#ff9d2e',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon name="age" size={22} />
+          </span>
           <div>
             <strong>21+</strong>
             <small>wiek</small>
@@ -211,7 +508,16 @@ export default function Home() {
         </div>
 
         <div className="statCard">
-          <span>🕒</span>
+          <span
+            style={{
+              display: 'inline-flex',
+              color: '#5a84ff',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon name="clock" size={22} />
+          </span>
           <div>
             <strong>Elastyczny</strong>
             <small>grafik</small>
@@ -221,7 +527,7 @@ export default function Home() {
 
       <section className="twoCol">
         <article className="glassCard sectionCard">
-          <h2>📋 Co będziesz robić?</h2>
+          <SectionTitle icon="clipboard" title="Co będziesz robić?" />
 
           <ul className="checkList">
             {tasks.map((item) => (
@@ -231,13 +537,17 @@ export default function Home() {
         </article>
 
         <article className="glassCard sectionCard">
-          <h2>🎁 Co otrzymasz?</h2>
+          <SectionTitle icon="gift" title="Co otrzymasz?" />
 
           <div className="benefitGrid">
-            {benefits.map(([icon, label]) => (
-              <div className="benefit" key={label}>
-                <span>{icon}</span>
-                {label}
+            {benefits.map((item) => (
+              <div
+                className="benefit"
+                key={item.label}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+              >
+                <Icon name={item.icon} size={18} color="#6b7da8" />
+                {item.label}
               </div>
             ))}
           </div>
@@ -245,7 +555,7 @@ export default function Home() {
       </section>
 
       <section className="glassCard sectionCard requirements">
-        <h2>👤 Czego potrzebujesz?</h2>
+        <SectionTitle icon="user" title="Czego potrzebujesz?" />
 
         <ul className="checkList">
           {requirements.map((item) => (
@@ -336,7 +646,17 @@ export default function Home() {
       </section>
 
       <section className="trustCard glassCard">
-        <div className="trustIcon">🛡️</div>
+        <div
+          className="trustIcon"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#5a84ff',
+          }}
+        >
+          <Icon name="shield" size={24} />
+        </div>
 
         <div>
           <strong>Dbamy o Twoje bezpieczeństwo i komfort pracy.</strong>
@@ -345,7 +665,17 @@ export default function Home() {
           </span>
         </div>
 
-        <div className="heart">♡</div>
+        <div
+          className="heart"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#c7cfeb',
+          }}
+        >
+          <Icon name="heart" size={20} />
+        </div>
       </section>
 
       <div className="bottomSpacer" />
