@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { siteConfig, type IconName } from '../lib/siteConfig';
 
 function BaseIcon({
@@ -258,12 +258,12 @@ function QuickStatIcon({
   );
 }
 
-function CTA({ label }: { label: string }) {
+function CTA({ label, message }: { label: string; message: string }) {
   return (
     <button
       className="cta"
       type="button"
-      onClick={() => alert(siteConfig.system.placeholderWhatsAppMessage)}
+      onClick={() => alert(message)}
     >
       <WhatsAppIcon />
       <span>{label}</span>
@@ -276,53 +276,86 @@ function formatSalary(min: number, max: number, currency: string) {
 }
 
 export default function Home() {
+  const [config, setConfig] = useState(siteConfig);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPublishedContent() {
+      try {
+        const response = await fetch(
+          'https://api.devopsbyteflexshift.com/api/site-content',
+          { cache: 'no-store' },
+        );
+
+        if (!response.ok) {
+          throw new Error(`Site content request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!cancelled && data?.ok === true && data?.content) {
+          setConfig(data.content as typeof siteConfig);
+        }
+      } catch (error) {
+        console.error('Using local siteConfig fallback:', error);
+      }
+    }
+
+    loadPublishedContent();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const salaryText = formatSalary(
-    siteConfig.salary.minimum,
-    siteConfig.salary.maximum,
-    siteConfig.general.currency,
+    config.salary.minimum,
+    config.salary.maximum,
+    config.general.currency,
   );
 
   return (
     <main className="pageShell">
-      {siteConfig.sections.showTicker && (
-        <div className="ticker" aria-label={siteConfig.ticker.ariaLabel}>
-          <div className="tickerTrack">{siteConfig.ticker.text}</div>
+      {config.sections.showTicker && (
+        <div className="ticker" aria-label={config.ticker.ariaLabel}>
+          <div className="tickerTrack">{config.ticker.text}</div>
         </div>
       )}
 
       <section className="hero glassCard">
         <div className="heroBrandRow">
           <div className="brandIdentity">
-            <div className="brandLogo" aria-label={siteConfig.brand.logoAlt}>
-              {siteConfig.brand.logoFallbackText}
+            <div className="brandLogo" aria-label={config.brand.logoAlt}>
+              {config.brand.logoFallbackText}
             </div>
 
             <div>
-              <div className="brandName">{siteConfig.brand.companyName}</div>
-              <div className="brandMeta">{siteConfig.brand.subtitle}</div>
+              <div className="brandName">{config.brand.companyName}</div>
+              <div className="brandMeta">{config.brand.subtitle}</div>
             </div>
           </div>
 
-          <div className="startBadge">{siteConfig.brand.startBadge}</div>
+          <div className="startBadge">{config.brand.startBadge}</div>
         </div>
 
         <div className="ratingRow">
           <span className="stars">★★★★★</span>
-          <strong>{siteConfig.hero.rating}</strong>
-          <span>{siteConfig.hero.reviewCountText}</span>
+          <strong>{config.hero.rating}</strong>
+          <span>{config.hero.reviewCountText}</span>
         </div>
 
         <div className="recommend">
           <span className="dot" />
-          {siteConfig.hero.recommendationText}
+          {config.hero.recommendationText}
         </div>
 
-        <h1>{siteConfig.hero.jobTitle}</h1>
+        <h1>{config.hero.jobTitle}</h1>
 
-        <p className="leadText">{siteConfig.hero.description}</p>
+        <p className="leadText">{config.hero.description}</p>
 
         <div className="chips">
-          {siteConfig.hero.features.map((item) => (
+          {config.hero.features.map((item) => (
             <span
               className="chip"
               key={item.label}
@@ -338,7 +371,7 @@ export default function Home() {
           ))}
         </div>
 
-        {siteConfig.sections.showSalary && (
+        {config.sections.showSalary && (
           <div className="salaryBox">
             <div className="salaryMain">
               <div
@@ -356,37 +389,37 @@ export default function Home() {
               <div>
                 <strong>{salaryText}</strong>
                 <span>
-                  {siteConfig.salary.taxLabel} / {siteConfig.salary.periodLabel}
+                  {config.salary.taxLabel} / {config.salary.periodLabel}
                 </span>
-                <em>{siteConfig.salary.bonusText}</em>
+                <em>{config.salary.bonusText}</em>
               </div>
             </div>
 
-            {siteConfig.sections.showSalaryComparison && (
+            {config.sections.showSalaryComparison && (
               <div className="salaryCompare">
-                <span>{siteConfig.salary.comparisonLabel}</span>
+                <span>{config.salary.comparisonLabel}</span>
                 <strong>
-                  {siteConfig.salary.comparisonValue.toLocaleString('pl-PL')}{' '}
-                  {siteConfig.general.currency}
+                  {config.salary.comparisonValue.toLocaleString('pl-PL')}{' '}
+                  {config.general.currency}
                 </strong>
               </div>
             )}
           </div>
         )}
 
-        {siteConfig.sections.showHeroCta && (
-          <CTA label={siteConfig.cta.hero} />
+        {config.sections.showHeroCta && (
+          <CTA label={config.cta.hero} message={config.system.placeholderWhatsAppMessage} />
         )}
       </section>
 
-      {siteConfig.sections.showQuickStats && (
+      {config.sections.showQuickStats && (
         <section className="quickStats">
           <div className="statCard">
             <QuickStatIcon icon="card" color="#23b26d" />
             <div>
               <strong>{salaryText}</strong>
               <small>
-                {siteConfig.salary.taxLabel} / {siteConfig.salary.periodLabel}
+                {config.salary.taxLabel} / {config.salary.periodLabel}
               </small>
             </div>
           </div>
@@ -394,49 +427,49 @@ export default function Home() {
           <div className="statCard">
             <QuickStatIcon icon="user" color="#4f7cff" />
             <div>
-              <strong>{siteConfig.quickStats.experience.title}</strong>
-              <small>{siteConfig.quickStats.experience.subtitle}</small>
+              <strong>{config.quickStats.experience.title}</strong>
+              <small>{config.quickStats.experience.subtitle}</small>
             </div>
           </div>
 
           <div className="statCard">
             <QuickStatIcon icon="age" color="#ff9d2e" />
             <div>
-              <strong>{siteConfig.quickStats.age.title}</strong>
-              <small>{siteConfig.quickStats.age.subtitle}</small>
+              <strong>{config.quickStats.age.title}</strong>
+              <small>{config.quickStats.age.subtitle}</small>
             </div>
           </div>
 
           <div className="statCard">
             <QuickStatIcon icon="clock" color="#5a84ff" />
             <div>
-              <strong>{siteConfig.quickStats.schedule.title}</strong>
-              <small>{siteConfig.quickStats.schedule.subtitle}</small>
+              <strong>{config.quickStats.schedule.title}</strong>
+              <small>{config.quickStats.schedule.subtitle}</small>
             </div>
           </div>
         </section>
       )}
 
-      {(siteConfig.sections.showTasks || siteConfig.sections.showBenefits) && (
+      {(config.sections.showTasks || config.sections.showBenefits) && (
         <section className="twoCol">
-          {siteConfig.sections.showTasks && (
+          {config.sections.showTasks && (
             <article className="glassCard sectionCard">
-              <SectionTitle icon="clipboard" title={siteConfig.tasks.title} />
+              <SectionTitle icon="clipboard" title={config.tasks.title} />
 
               <ul className="checkList">
-                {siteConfig.tasks.items.map((item) => (
+                {config.tasks.items.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
             </article>
           )}
 
-          {siteConfig.sections.showBenefits && (
+          {config.sections.showBenefits && (
             <article className="glassCard sectionCard">
-              <SectionTitle icon="gift" title={siteConfig.benefits.title} />
+              <SectionTitle icon="gift" title={config.benefits.title} />
 
               <div className="benefitGrid">
-                {siteConfig.benefits.items.map((item) => (
+                {config.benefits.items.map((item) => (
                   <div
                     className="benefit"
                     key={item.label}
@@ -456,21 +489,21 @@ export default function Home() {
         </section>
       )}
 
-      {siteConfig.sections.showRequirements && (
+      {config.sections.showRequirements && (
         <section className="glassCard sectionCard requirements">
-          <SectionTitle icon="user" title={siteConfig.requirements.title} />
+          <SectionTitle icon="user" title={config.requirements.title} />
 
           <ul className="checkList">
-            {siteConfig.requirements.items.map((item) => (
+            {config.requirements.items.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </section>
       )}
 
-      {siteConfig.sections.showReviews && (
+      {config.sections.showReviews && (
         <section className="reviewsGrid">
-          {siteConfig.reviews.map((review) => (
+          {config.reviews.map((review) => (
             <article className="reviewCard glassCard" key={review.name}>
               <div className="reviewHead">
                 <div className="avatar">{review.initials}</div>
@@ -490,7 +523,7 @@ export default function Home() {
         </section>
       )}
 
-      {siteConfig.sections.showMidCta && (
+      {config.sections.showMidCta && (
         <section className="midCta glassCard">
           <div className="midCtaText">
             <div className="waBubble">
@@ -498,21 +531,21 @@ export default function Home() {
             </div>
 
             <div>
-              <strong>{siteConfig.midCta.title}</strong>
-              <span>{siteConfig.midCta.subtitle}</span>
+              <strong>{config.midCta.title}</strong>
+              <span>{config.midCta.subtitle}</span>
             </div>
           </div>
 
-          <CTA label={siteConfig.cta.middle} />
+          <CTA label={config.cta.middle} message={config.system.placeholderWhatsAppMessage} />
         </section>
       )}
 
-      {siteConfig.sections.showSteps && (
+      {config.sections.showSteps && (
         <section className="glassCard sectionCard">
-          <h2>{siteConfig.steps.title}</h2>
+          <h2>{config.steps.title}</h2>
 
           <div className="steps">
-            {siteConfig.steps.items.map((step, index) => (
+            {config.steps.items.map((step, index) => (
               <div className="step" key={step.title}>
                 <span>{index + 1}</span>
                 <strong>{step.title}</strong>
@@ -523,12 +556,12 @@ export default function Home() {
         </section>
       )}
 
-      {siteConfig.sections.showFaq && (
+      {config.sections.showFaq && (
         <section className="glassCard sectionCard faqSection">
-          <h2>{siteConfig.faq.title}</h2>
+          <h2>{config.faq.title}</h2>
 
           <div className="faqs">
-            {siteConfig.faq.items.map((item) => (
+            {config.faq.items.map((item) => (
               <details key={item.question}>
                 <summary>
                   {item.question}
@@ -541,7 +574,7 @@ export default function Home() {
         </section>
       )}
 
-      {siteConfig.sections.showFooterTrust && (
+      {config.sections.showFooterTrust && (
         <section className="trustCard glassCard">
           <div
             className="trustIcon"
@@ -556,8 +589,8 @@ export default function Home() {
           </div>
 
           <div>
-            <strong>{siteConfig.footerTrust.title}</strong>
-            <span>{siteConfig.footerTrust.description}</span>
+            <strong>{config.footerTrust.title}</strong>
+            <span>{config.footerTrust.description}</span>
           </div>
 
           <div
@@ -576,9 +609,9 @@ export default function Home() {
 
       <div className="bottomSpacer" />
 
-      {siteConfig.sections.showStickyCta && (
+      {config.sections.showStickyCta && (
         <div className="stickyCta">
-          <CTA label={siteConfig.cta.sticky} />
+          <CTA label={config.cta.sticky} message={config.system.placeholderWhatsAppMessage} />
         </div>
       )}
     </main>
