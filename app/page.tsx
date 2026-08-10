@@ -351,6 +351,32 @@ function SectionTitle({
   );
 }
 
+function QuickStatIcon({
+  icon,
+  color,
+}: {
+  icon: IconName;
+  color: string;
+}) {
+  return (
+    <span
+      style={{
+        width: 46,
+        height: 46,
+        minWidth: 46,
+        minHeight: 46,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color,
+        flexShrink: 0,
+      }}
+    >
+      <Icon name={icon} size={28} color={color} />
+    </span>
+  );
+}
+
 function CTA({ label }: { label: string }) {
   return (
     <button
@@ -457,16 +483,7 @@ export default function Home() {
 
       <section className="quickStats">
         <div className="statCard">
-          <span
-            style={{
-              display: 'inline-flex',
-              color: '#23b26d',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="card" size={22} />
-          </span>
+          <QuickStatIcon icon="card" color="#23b26d" />
           <div>
             <strong>6 000–7 500 PLN</strong>
             <small>brutto / miesiąc</small>
@@ -474,16 +491,7 @@ export default function Home() {
         </div>
 
         <div className="statCard">
-          <span
-            style={{
-              display: 'inline-flex',
-              color: '#4f7cff',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="user" size={22} />
-          </span>
+          <QuickStatIcon icon="user" color="#4f7cff" />
           <div>
             <strong>Brak</strong>
             <small>doświadczenia</small>
@@ -491,16 +499,7 @@ export default function Home() {
         </div>
 
         <div className="statCard">
-          <span
-            style={{
-              display: 'inline-flex',
-              color: '#ff9d2e',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="age" size={22} />
-          </span>
+          <QuickStatIcon icon="age" color="#ff9d2e" />
           <div>
             <strong>21+</strong>
             <small>wiek</small>
@@ -508,16 +507,7 @@ export default function Home() {
         </div>
 
         <div className="statCard">
-          <span
-            style={{
-              display: 'inline-flex',
-              color: '#5a84ff',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="clock" size={22} />
-          </span>
+          <QuickStatIcon icon="clock" color="#5a84ff" />
           <div>
             <strong>Elastyczny</strong>
             <small>grafik</small>
