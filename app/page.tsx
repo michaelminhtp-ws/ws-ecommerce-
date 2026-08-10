@@ -1,110 +1,14 @@
 'use client';
 
-type IconName =
-  | 'location'
-  | 'briefcase'
-  | 'clock'
-  | 'home'
-  | 'building'
-  | 'calendar'
-  | 'graduation'
-  | 'card'
-  | 'user'
-  | 'users'
-  | 'chart'
-  | 'rocket'
-  | 'clipboard'
-  | 'gift'
-  | 'shield'
-  | 'heart'
-  | 'age';
-
-const features = [
-  { icon: 'location' as IconName, label: 'Cała Polska' },
-  { icon: 'briefcase' as IconName, label: 'Pełny etat' },
-  { icon: 'clock' as IconName, label: 'Część etatu' },
-  { icon: 'home' as IconName, label: 'Zdalna' },
-  { icon: 'building' as IconName, label: 'Hybrydowa' },
-  { icon: 'calendar' as IconName, label: 'Elastyczny grafik' },
-  { icon: 'graduation' as IconName, label: 'Szkolenie' },
-];
-
-const tasks = [
-  'Aktualizować proste oferty produktowe',
-  'Wspierać obsługę zamówień',
-  'Przygotowywać podstawowe raporty',
-  'Wykonywać proste zadania online zgodnie z instrukcją',
-  'Komunikować się z zespołem, gdy zajdzie potrzeba',
-];
-
-const requirements = [
-  'Ukończone 21 lat',
-  'Telefon lub komputer z dobrym internetem',
-  'Dobra komunikacja z zespołem',
-  'Podstawowy angielski',
-  'Wymagana znajomość języka lokalnego',
-  'Brak wymaganego doświadczenia',
-  'Brak wymagań co do płci',
-];
-
-const benefits = [
-  { icon: 'briefcase' as IconName, label: 'Pełny etat / część etatu' },
-  { icon: 'home' as IconName, label: 'Praca zdalna lub hybrydowa' },
-  { icon: 'graduation' as IconName, label: 'Szkolenie i wdrożenie' },
-  { icon: 'users' as IconName, label: 'Wsparcie zespołu' },
-  { icon: 'chart' as IconName, label: 'Możliwość premii' },
-  { icon: 'rocket' as IconName, label: 'Szybki start' },
-];
-
-const reviews = [
-  {
-    initials: 'K',
-    name: 'Kamil, 27',
-    city: 'Warszawa',
-    text: 'Świetne wdrożenie i zespół! Praca zdalna daje mi dużą swobodę.',
-    pay: '6 800 PLN brutto / mies.',
-  },
-  {
-    initials: 'N',
-    name: 'Natalia, 31',
-    city: 'Kraków',
-    text: 'Nie miałam doświadczenia, a teraz czuję się pewnie w zespole.',
-    pay: '6 200 PLN brutto / mies.',
-  },
-  {
-    initials: 'P',
-    name: 'Paulina, 25',
-    city: 'Wrocław',
-    text: 'Elastyczny grafik pozwala mi łączyć pracę z innymi planami.',
-    pay: '6 500 PLN brutto / mies.',
-  },
-];
-
-const faqs = [
-  [
-    'Czy wymagane jest doświadczenie?',
-    'Nie. Zapewniamy krótkie wdrożenie oraz proste instrukcje potrzebne na start.',
-  ],
-  [
-    'Czy mogę pracować tylko z telefonu?',
-    'Do części zadań wystarczy telefon, ale komputer może być wygodniejszy przy dłuższej pracy.',
-  ],
-  [
-    'Ile godzin dziennie trzeba pracować?',
-    'Orientacyjnie 1–3 godziny przy części etatu i około 6 godzin przy pełnym etacie.',
-  ],
-  [
-    'Jak szybko mogę zacząć?',
-    'Po kontakcie przez WhatsApp otrzymasz szczegóły oferty i dalsze kroki.',
-  ],
-];
+import type { ReactNode } from 'react';
+import { siteConfig, type IconName } from '../lib/siteConfig';
 
 function BaseIcon({
   children,
   size = 20,
   color = 'currentColor',
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   size?: number;
   color?: string;
 }) {
@@ -148,7 +52,6 @@ function Icon({
           <circle cx="12" cy="11" r="2.2" />
         </BaseIcon>
       );
-
     case 'briefcase':
       return (
         <BaseIcon size={size} color={color}>
@@ -157,7 +60,6 @@ function Icon({
           <path d="M3 11.5h18" />
         </BaseIcon>
       );
-
     case 'clock':
       return (
         <BaseIcon size={size} color={color}>
@@ -165,7 +67,6 @@ function Icon({
           <path d="M12 7.5v4.8l3.2 1.8" />
         </BaseIcon>
       );
-
     case 'home':
       return (
         <BaseIcon size={size} color={color}>
@@ -174,7 +75,6 @@ function Icon({
           <path d="M10 20v-5h4v5" />
         </BaseIcon>
       );
-
     case 'building':
       return (
         <BaseIcon size={size} color={color}>
@@ -183,7 +83,6 @@ function Icon({
           <path d="M11 20.5v-3h2v3" />
         </BaseIcon>
       );
-
     case 'calendar':
       return (
         <BaseIcon size={size} color={color}>
@@ -191,7 +90,6 @@ function Icon({
           <path d="M8 3.5v4M16 3.5v4M3 9.5h18" />
         </BaseIcon>
       );
-
     case 'graduation':
       return (
         <BaseIcon size={size} color={color}>
@@ -199,7 +97,6 @@ function Icon({
           <path d="M7 11.5v3.2c0 1.8 2.2 3.3 5 3.3s5-1.5 5-3.3v-3.2" />
         </BaseIcon>
       );
-
     case 'card':
       return (
         <BaseIcon size={size} color={color}>
@@ -208,7 +105,6 @@ function Icon({
           <path d="M7 15h3.5" />
         </BaseIcon>
       );
-
     case 'user':
       return (
         <BaseIcon size={size} color={color}>
@@ -216,7 +112,6 @@ function Icon({
           <path d="M5.5 19c1.3-2.6 3.7-4 6.5-4s5.2 1.4 6.5 4" />
         </BaseIcon>
       );
-
     case 'users':
       return (
         <BaseIcon size={size} color={color}>
@@ -226,7 +121,6 @@ function Icon({
           <path d="M14 17.8c.7-1.5 2-2.3 3.5-2.3 1.3 0 2.4.6 3 1.7" />
         </BaseIcon>
       );
-
     case 'chart':
       return (
         <BaseIcon size={size} color={color}>
@@ -236,7 +130,6 @@ function Icon({
           <path d="M17 16v-7" />
         </BaseIcon>
       );
-
     case 'rocket':
       return (
         <BaseIcon size={size} color={color}>
@@ -246,7 +139,6 @@ function Icon({
           <path d="M13.8 8.2h.01" />
         </BaseIcon>
       );
-
     case 'clipboard':
       return (
         <BaseIcon size={size} color={color}>
@@ -255,7 +147,6 @@ function Icon({
           <path d="M8.5 10h7M8.5 13.5h7M8.5 17h4.5" />
         </BaseIcon>
       );
-
     case 'gift':
       return (
         <BaseIcon size={size} color={color}>
@@ -265,21 +156,18 @@ function Icon({
           <path d="M12 9h3.2A1.8 1.8 0 1 0 14 5.7L12 9Z" />
         </BaseIcon>
       );
-
     case 'shield':
       return (
         <BaseIcon size={size} color={color}>
           <path d="M12 3.5 19 6v5.5c0 4.2-2.7 7.4-7 9-4.3-1.6-7-4.8-7-9V6l7-2.5Z" />
         </BaseIcon>
       );
-
     case 'heart':
       return (
         <BaseIcon size={size} color={color}>
           <path d="M12 20s-6.5-4.3-8.3-8a4.8 4.8 0 0 1 8.3-4.7A4.8 4.8 0 0 1 20.3 12C18.5 15.7 12 20 12 20Z" />
         </BaseIcon>
       );
-
     case 'age':
       return (
         <BaseIcon size={size} color={color}>
@@ -288,7 +176,6 @@ function Icon({
           <path d="M13 11.5c0-1.2.9-2 2.1-2 1.1 0 1.9.7 1.9 1.8 0 .9-.4 1.4-1.4 2.1l-1.5 1.1h3" />
         </BaseIcon>
       );
-
     default:
       return null;
   }
@@ -324,13 +211,7 @@ function SectionTitle({
   title: string;
 }) {
   return (
-    <h2
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-      }}
-    >
+    <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       <span
         style={{
           width: 32,
@@ -382,9 +263,7 @@ function CTA({ label }: { label: string }) {
     <button
       className="cta"
       type="button"
-      onClick={() =>
-        alert('WhatsApp redirect will be connected in a later phase.')
-      }
+      onClick={() => alert(siteConfig.system.placeholderWhatsAppMessage)}
     >
       <WhatsAppIcon />
       <span>{label}</span>
@@ -392,58 +271,66 @@ function CTA({ label }: { label: string }) {
   );
 }
 
+function formatSalary(min: number, max: number, currency: string) {
+  return `${min.toLocaleString('pl-PL')}–${max.toLocaleString('pl-PL')} ${currency}`;
+}
+
 export default function Home() {
+  const salaryText = formatSalary(
+    siteConfig.salary.minimum,
+    siteConfig.salary.maximum,
+    siteConfig.general.currency,
+  );
+
   return (
     <main className="pageShell">
-      <div className="ticker" aria-label="Rekrutacja aktywna">
-        <div className="tickerTrack">
-          • Rekrutacja aktywna • Nie zwlekaj • Zostały tylko 3 miejsca 🔥 •
-          Rekrutacja aktywna • Nie zwlekaj •
+      {siteConfig.sections.showTicker && (
+        <div className="ticker" aria-label={siteConfig.ticker.ariaLabel}>
+          <div className="tickerTrack">{siteConfig.ticker.text}</div>
         </div>
-      </div>
+      )}
 
       <section className="hero glassCard">
         <div className="heroBrandRow">
           <div className="brandIdentity">
-            <div className="brandLogo" aria-label="Tymczasowe logo">
-              A
+            <div className="brandLogo" aria-label={siteConfig.brand.logoAlt}>
+              {siteConfig.brand.logoFallbackText}
             </div>
 
             <div>
-              <div className="brandName">ALLEYBIZCOM Sp. z o.o.</div>
-              <div className="brandMeta">
-                Lublin • Technology Recruitment™
-              </div>
+              <div className="brandName">{siteConfig.brand.companyName}</div>
+              <div className="brandMeta">{siteConfig.brand.subtitle}</div>
             </div>
           </div>
 
-          <div className="startBadge">OD ZARAZ</div>
+          <div className="startBadge">{siteConfig.brand.startBadge}</div>
         </div>
 
         <div className="ratingRow">
           <span className="stars">★★★★★</span>
-          <strong>4.9</strong>
-          <span>na podstawie 1 357+ opinii</span>
+          <strong>{siteConfig.hero.rating}</strong>
+          <span>{siteConfig.hero.reviewCountText}</span>
         </div>
 
         <div className="recommend">
           <span className="dot" />
-          94% kandydatów poleca tę ofertę
+          {siteConfig.hero.recommendationText}
         </div>
 
-        <h1>Asystent E-Commerce</h1>
+        <h1>{siteConfig.hero.jobTitle}</h1>
 
-        <p className="leadText">
-          Nie wymagamy doświadczenia! Zapewniamy pełne szkolenie i wsparcie
-          na każdym etapie.
-        </p>
+        <p className="leadText">{siteConfig.hero.description}</p>
 
         <div className="chips">
-          {features.map((item) => (
+          {siteConfig.hero.features.map((item) => (
             <span
               className="chip"
               key={item.label}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
             >
               <Icon name={item.icon} size={16} color="#6c7ba1" />
               {item.label}
@@ -451,228 +338,249 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="salaryBox">
-          <div className="salaryMain">
-            <div
-              className="salaryIcon"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#23b26d',
-              }}
-            >
-              <Icon name="card" size={22} />
+        {siteConfig.sections.showSalary && (
+          <div className="salaryBox">
+            <div className="salaryMain">
+              <div
+                className="salaryIcon"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#23b26d',
+                }}
+              >
+                <Icon name="card" size={22} />
+              </div>
+
+              <div>
+                <strong>{salaryText}</strong>
+                <span>
+                  {siteConfig.salary.taxLabel} / {siteConfig.salary.periodLabel}
+                </span>
+                <em>{siteConfig.salary.bonusText}</em>
+              </div>
             </div>
 
+            {siteConfig.sections.showSalaryComparison && (
+              <div className="salaryCompare">
+                <span>{siteConfig.salary.comparisonLabel}</span>
+                <strong>
+                  {siteConfig.salary.comparisonValue.toLocaleString('pl-PL')}{' '}
+                  {siteConfig.general.currency}
+                </strong>
+              </div>
+            )}
+          </div>
+        )}
+
+        {siteConfig.sections.showHeroCta && (
+          <CTA label={siteConfig.cta.hero} />
+        )}
+      </section>
+
+      {siteConfig.sections.showQuickStats && (
+        <section className="quickStats">
+          <div className="statCard">
+            <QuickStatIcon icon="card" color="#23b26d" />
             <div>
-              <strong>6 000–7 500 PLN</strong>
-              <span>brutto / miesiąc</span>
-              <em>+ możliwa premia</em>
+              <strong>{salaryText}</strong>
+              <small>
+                {siteConfig.salary.taxLabel} / {siteConfig.salary.periodLabel}
+              </small>
             </div>
           </div>
 
-          <div className="salaryCompare">
-            <span>Średnia krajowa:</span>
-            <strong>4 000 PLN</strong>
+          <div className="statCard">
+            <QuickStatIcon icon="user" color="#4f7cff" />
+            <div>
+              <strong>{siteConfig.quickStats.experience.title}</strong>
+              <small>{siteConfig.quickStats.experience.subtitle}</small>
+            </div>
           </div>
-        </div>
 
-        <CTA label="Zapytaj o pracę przez WhatsApp" />
-      </section>
-
-      <section className="quickStats">
-        <div className="statCard">
-          <QuickStatIcon icon="card" color="#23b26d" />
-          <div>
-            <strong>6 000–7 500 PLN</strong>
-            <small>brutto / miesiąc</small>
+          <div className="statCard">
+            <QuickStatIcon icon="age" color="#ff9d2e" />
+            <div>
+              <strong>{siteConfig.quickStats.age.title}</strong>
+              <small>{siteConfig.quickStats.age.subtitle}</small>
+            </div>
           </div>
-        </div>
 
-        <div className="statCard">
-          <QuickStatIcon icon="user" color="#4f7cff" />
-          <div>
-            <strong>Brak</strong>
-            <small>doświadczenia</small>
+          <div className="statCard">
+            <QuickStatIcon icon="clock" color="#5a84ff" />
+            <div>
+              <strong>{siteConfig.quickStats.schedule.title}</strong>
+              <small>{siteConfig.quickStats.schedule.subtitle}</small>
+            </div>
           </div>
-        </div>
+        </section>
+      )}
 
-        <div className="statCard">
-          <QuickStatIcon icon="age" color="#ff9d2e" />
-          <div>
-            <strong>21+</strong>
-            <small>wiek</small>
-          </div>
-        </div>
+      {(siteConfig.sections.showTasks || siteConfig.sections.showBenefits) && (
+        <section className="twoCol">
+          {siteConfig.sections.showTasks && (
+            <article className="glassCard sectionCard">
+              <SectionTitle icon="clipboard" title={siteConfig.tasks.title} />
 
-        <div className="statCard">
-          <QuickStatIcon icon="clock" color="#5a84ff" />
-          <div>
-            <strong>Elastyczny</strong>
-            <small>grafik</small>
-          </div>
-        </div>
-      </section>
+              <ul className="checkList">
+                {siteConfig.tasks.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+          )}
 
-      <section className="twoCol">
-        <article className="glassCard sectionCard">
-          <SectionTitle icon="clipboard" title="Co będziesz robić?" />
+          {siteConfig.sections.showBenefits && (
+            <article className="glassCard sectionCard">
+              <SectionTitle icon="gift" title={siteConfig.benefits.title} />
+
+              <div className="benefitGrid">
+                {siteConfig.benefits.items.map((item) => (
+                  <div
+                    className="benefit"
+                    key={item.label}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                    }}
+                  >
+                    <Icon name={item.icon} size={18} color="#6b7da8" />
+                    {item.label}
+                  </div>
+                ))}
+              </div>
+            </article>
+          )}
+        </section>
+      )}
+
+      {siteConfig.sections.showRequirements && (
+        <section className="glassCard sectionCard requirements">
+          <SectionTitle icon="user" title={siteConfig.requirements.title} />
 
           <ul className="checkList">
-            {tasks.map((item) => (
+            {siteConfig.requirements.items.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
-        </article>
+        </section>
+      )}
 
-        <article className="glassCard sectionCard">
-          <SectionTitle icon="gift" title="Co otrzymasz?" />
+      {siteConfig.sections.showReviews && (
+        <section className="reviewsGrid">
+          {siteConfig.reviews.map((review) => (
+            <article className="reviewCard glassCard" key={review.name}>
+              <div className="reviewHead">
+                <div className="avatar">{review.initials}</div>
 
-          <div className="benefitGrid">
-            {benefits.map((item) => (
-              <div
-                className="benefit"
-                key={item.label}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-              >
-                <Icon name={item.icon} size={18} color="#6b7da8" />
-                {item.label}
+                <div>
+                  <strong>{review.name}</strong>
+                  <span>{review.city}</span>
+                </div>
+
+                <div className="quote">“</div>
+              </div>
+
+              <p>{review.text}</p>
+              <strong className="reviewPay">{review.pay}</strong>
+            </article>
+          ))}
+        </section>
+      )}
+
+      {siteConfig.sections.showMidCta && (
+        <section className="midCta glassCard">
+          <div className="midCtaText">
+            <div className="waBubble">
+              <WhatsAppIcon />
+            </div>
+
+            <div>
+              <strong>{siteConfig.midCta.title}</strong>
+              <span>{siteConfig.midCta.subtitle}</span>
+            </div>
+          </div>
+
+          <CTA label={siteConfig.cta.middle} />
+        </section>
+      )}
+
+      {siteConfig.sections.showSteps && (
+        <section className="glassCard sectionCard">
+          <h2>{siteConfig.steps.title}</h2>
+
+          <div className="steps">
+            {siteConfig.steps.items.map((step, index) => (
+              <div className="step" key={step.title}>
+                <span>{index + 1}</span>
+                <strong>{step.title}</strong>
+                <p>{step.description}</p>
               </div>
             ))}
           </div>
-        </article>
-      </section>
+        </section>
+      )}
 
-      <section className="glassCard sectionCard requirements">
-        <SectionTitle icon="user" title="Czego potrzebujesz?" />
+      {siteConfig.sections.showFaq && (
+        <section className="glassCard sectionCard faqSection">
+          <h2>{siteConfig.faq.title}</h2>
 
-        <ul className="checkList">
-          {requirements.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
+          <div className="faqs">
+            {siteConfig.faq.items.map((item) => (
+              <details key={item.question}>
+                <summary>
+                  {item.question}
+                  <span>+</span>
+                </summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
 
-      <section className="reviewsGrid">
-        {reviews.map((review) => (
-          <article className="reviewCard glassCard" key={review.name}>
-            <div className="reviewHead">
-              <div className="avatar">{review.initials}</div>
-
-              <div>
-                <strong>{review.name}</strong>
-                <span>{review.city}</span>
-              </div>
-
-              <div className="quote">“</div>
-            </div>
-
-            <p>{review.text}</p>
-
-            <strong className="reviewPay">{review.pay}</strong>
-          </article>
-        ))}
-      </section>
-
-      <section className="midCta glassCard">
-        <div className="midCtaText">
-          <div className="waBubble">
-            <WhatsAppIcon />
+      {siteConfig.sections.showFooterTrust && (
+        <section className="trustCard glassCard">
+          <div
+            className="trustIcon"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#5a84ff',
+            }}
+          >
+            <Icon name="shield" size={24} />
           </div>
 
           <div>
-            <strong>Zainteresowana/y?</strong>
-            <span>Napisz do nas i dowiedz się więcej o ofercie.</span>
-          </div>
-        </div>
-
-        <CTA label="Aplikuj przez WhatsApp" />
-      </section>
-
-      <section className="glassCard sectionCard">
-        <h2>Jak wygląda rozpoczęcie?</h2>
-
-        <div className="steps">
-          <div className="step">
-            <span>1</span>
-            <strong>Napisz do nas</strong>
-            <p>
-              Skontaktuj się przez WhatsApp — odpowiemy szybko i konkretnie.
-            </p>
+            <strong>{siteConfig.footerTrust.title}</strong>
+            <span>{siteConfig.footerTrust.description}</span>
           </div>
 
-          <div className="step">
-            <span>2</span>
-            <strong>Krótkie wdrożenie</strong>
-            <p>Otrzymasz szkolenie i wszystkie potrzebne materiały.</p>
+          <div
+            className="heart"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#c7cfeb',
+            }}
+          >
+            <Icon name="heart" size={20} />
           </div>
-
-          <div className="step">
-            <span>3</span>
-            <strong>Rozpocznij pracę</strong>
-            <p>
-              Zacznij pracować zdalnie lub hybrydowo — zgodnie z ustaleniami.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="glassCard sectionCard faqSection">
-        <h2>Najczęściej zadawane pytania</h2>
-
-        <div className="faqs">
-          {faqs.map(([q, a]) => (
-            <details key={q}>
-              <summary>
-                {q}
-                <span>+</span>
-              </summary>
-
-              <p>{a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <section className="trustCard glassCard">
-        <div
-          className="trustIcon"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#5a84ff',
-          }}
-        >
-          <Icon name="shield" size={24} />
-        </div>
-
-        <div>
-          <strong>Dbamy o Twoje bezpieczeństwo i komfort pracy.</strong>
-          <span>
-            Wszystkie warunki współpracy omawiamy jasno i przejrzyście.
-          </span>
-        </div>
-
-        <div
-          className="heart"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#c7cfeb',
-          }}
-        >
-          <Icon name="heart" size={20} />
-        </div>
-      </section>
+        </section>
+      )}
 
       <div className="bottomSpacer" />
 
-      <div className="stickyCta">
-        <CTA label="Napisz na WhatsApp" />
-      </div>
+      {siteConfig.sections.showStickyCta && (
+        <div className="stickyCta">
+          <CTA label={siteConfig.cta.sticky} />
+        </div>
+      )}
     </main>
   );
 }
