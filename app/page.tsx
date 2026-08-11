@@ -258,12 +258,16 @@ function QuickStatIcon({
   );
 }
 
-function CTA({ label, message }: { label: string; message: string }) {
+const WHATSAPP_REDIRECT_URL = 'https://api.devopsbyteflexshift.com/go';
+
+function CTA({ label }: { label: string }) {
   return (
     <button
       className="cta"
       type="button"
-      onClick={() => alert(message)}
+      onClick={() => {
+        window.location.href = WHATSAPP_REDIRECT_URL;
+      }}
     >
       <WhatsAppIcon />
       <span>{label}</span>
@@ -408,7 +412,7 @@ export default function Home() {
         )}
 
         {config.sections.showHeroCta && (
-          <CTA label={config.cta.hero} message={config.system.placeholderWhatsAppMessage} />
+          <CTA label={config.cta.hero} />
         )}
       </section>
 
@@ -536,7 +540,7 @@ export default function Home() {
             </div>
           </div>
 
-          <CTA label={config.cta.middle} message={config.system.placeholderWhatsAppMessage} />
+          <CTA label={config.cta.middle} />
         </section>
       )}
 
@@ -611,7 +615,7 @@ export default function Home() {
 
       {config.sections.showStickyCta && (
         <div className="stickyCta">
-          <CTA label={config.cta.sticky} message={config.system.placeholderWhatsAppMessage} />
+          <CTA label={config.cta.sticky} />
         </div>
       )}
     </main>
