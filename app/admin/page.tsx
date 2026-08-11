@@ -55,9 +55,11 @@ export default function AdminPage() {
 
         <hr />
 
-        <button>
-          Edit Site Content
-        </button>
+        <a href="/admin/content">
+  <button>
+    Edit Site Content
+  </button>
+</a>
 
       </main>
     );
