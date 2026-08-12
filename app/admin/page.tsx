@@ -303,6 +303,39 @@ export default function AdminPage() {
                 </button>
               </div>
             </a>
+
+            <a
+              href="/admin/settings"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <div style={dashboardCardStyle}>
+                <h2
+                  style={{
+                    marginTop: 0,
+                    marginBottom: 8,
+                  }}
+                >
+                  Settings
+                </h2>
+
+                <p
+                  style={{
+                    marginTop: 0,
+                    color: "#6a7892",
+                  }}
+                >
+                  Manage the duplicate-IP window used for
+                  unique Lead detection.
+                </p>
+
+                <button style={primaryButtonStyle}>
+                  Manage Settings
+                </button>
+              </div>
+            </a>
           </div>
         </div>
       </main>
