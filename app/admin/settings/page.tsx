@@ -30,7 +30,7 @@ const DUPLICATE_WINDOW_OPTIONS: {
   label: string;
   description: string;
 }[] = [
-  { value: "same_day", label: "Same Day", description: "The same IP becomes unique again on the next Warsaw calendar day." },
+  { value: "same_day", label: "Same Day", description: "The same IP becomes unique again on the next calendar day in the selected project timezone." },
   { value: "24_hours", label: "24 Hours", description: "The same IP stays duplicate for 24 hours from its first click." },
   { value: "3_days", label: "3 Days", description: "The same IP stays duplicate for 3 days." },
   { value: "7_days", label: "7 Days", description: "The same IP stays duplicate for 7 days." },
@@ -41,11 +41,94 @@ const DUPLICATE_WINDOW_OPTIONS: {
   { value: "forever", label: "Forever", description: "Once recorded, the same IP always remains duplicate." },
 ];
 
+function getSupportedTimezones(): string[] {
+  try {
+    const intlWithSupportedValues = Intl as typeof Intl & {
+      supportedValuesOf?: (key: string) => string[];
+    };
+
+    const values =
+      intlWithSupportedValues.supportedValuesOf?.("timeZone") ?? [];
+
+    if (values.length > 0) {
+      return values;
+    }
+  } catch {
+    // Fall through to the compatibility list below.
+  }
+
+  return [
+    "Africa/Cairo",
+    "Africa/Casablanca",
+    "Africa/Johannesburg",
+    "America/Chicago",
+    "America/Denver",
+    "America/Los_Angeles",
+    "America/Mexico_City",
+    "America/New_York",
+    "America/Sao_Paulo",
+    "Asia/Bangkok",
+    "Asia/Dubai",
+    "Asia/Hong_Kong",
+    "Asia/Jakarta",
+    "Asia/Kolkata",
+    "Asia/Kuala_Lumpur",
+    "Asia/Manila",
+    "Asia/Riyadh",
+    "Asia/Seoul",
+    "Asia/Shanghai",
+    "Asia/Singapore",
+    "Asia/Taipei",
+    "Asia/Tokyo",
+    "Asia/Yangon",
+    "Australia/Brisbane",
+    "Australia/Melbourne",
+    "Australia/Perth",
+    "Australia/Sydney",
+    "Europe/Amsterdam",
+    "Europe/Athens",
+    "Europe/Berlin",
+    "Europe/Brussels",
+    "Europe/Bucharest",
+    "Europe/Budapest",
+    "Europe/Dublin",
+    "Europe/Helsinki",
+    "Europe/Istanbul",
+    "Europe/Lisbon",
+    "Europe/London",
+    "Europe/Madrid",
+    "Europe/Oslo",
+    "Europe/Paris",
+    "Europe/Prague",
+    "Europe/Rome",
+    "Europe/Stockholm",
+    "Europe/Vienna",
+    "Europe/Warsaw",
+    "Europe/Zurich",
+    "Pacific/Auckland",
+  ];
+}
+
+function isValidTimezone(value: string): boolean {
+  try {
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: value,
+    }).format(new Date());
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const TIMEZONE_OPTIONS = getSupportedTimezones();
+
 export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const [saving, setSaving] = useState(false);
   const [timezone, setTimezone] = useState("Europe/Warsaw");
+  const [savedTimezone, setSavedTimezone] = useState("Europe/Warsaw");
   const [duplicateWindow, setDuplicateWindow] =
     useState<DuplicateWindow>("24_hours");
   const [savedDuplicateWindow, setSavedDuplicateWindow] =
@@ -94,7 +177,10 @@ export default function SettingsPage() {
         return;
       }
 
-      setTimezone(data.settings.timezone || "Europe/Warsaw");
+      const loadedTimezone =
+        data.settings.timezone || "Europe/Warsaw";
+      setTimezone(loadedTimezone);
+      setSavedTimezone(loadedTimezone);
       setDuplicateWindow(data.settings.duplicateWindow);
       setSavedDuplicateWindow(data.settings.duplicateWindow);
     } catch (error) {
@@ -112,6 +198,15 @@ export default function SettingsPage() {
       setMessage("");
       setMessageType("");
 
+      const cleanTimezone = timezone.trim();
+
+      if (!isValidTimezone(cleanTimezone)) {
+        setMessage("Please choose a valid timezone.");
+        setMessageType("error");
+        setSaving(false);
+        return;
+      }
+
       const response = await fetch(
         `${API_URL}/api/admin/system-settings`,
         {
@@ -119,7 +214,7 @@ export default function SettingsPage() {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
-            timezone: "Europe/Warsaw",
+            timezone: cleanTimezone,
             duplicateWindow,
           }),
         }
@@ -127,15 +222,18 @@ export default function SettingsPage() {
       const data: SettingsResponse = await response.json();
 
       if (!response.ok || !data.ok || !data.settings) {
-        setMessage("Could not save duplicate window.");
+        setMessage("Could not save settings.");
         setMessageType("error");
         return;
       }
 
-      setTimezone(data.settings.timezone || "Europe/Warsaw");
+      const savedTimezoneValue =
+        data.settings.timezone || cleanTimezone;
+      setTimezone(savedTimezoneValue);
+      setSavedTimezone(savedTimezoneValue);
       setDuplicateWindow(data.settings.duplicateWindow);
       setSavedDuplicateWindow(data.settings.duplicateWindow);
-      setMessage("Duplicate window saved.");
+      setMessage("Settings saved.");
       setMessageType("success");
     } catch (error) {
       console.error(error);
@@ -246,7 +344,7 @@ export default function SettingsPage() {
         <div>
           <h1 style={{ marginBottom: 6 }}>Settings</h1>
           <p style={{ margin: 0, color: "#6a7892" }}>
-            Manage duplicate-IP behavior.
+            Manage duplicate-IP behavior and project timezone.
           </p>
         </div>
 
@@ -324,7 +422,7 @@ export default function SettingsPage() {
               onClick={saveSettings}
               disabled={saving}
             >
-              {saving ? "Saving..." : "Save"}
+              {saving ? "Saving..." : "Save Settings"}
             </button>
 
             <span style={{ fontSize: 14, color: "#6a7892" }}>
@@ -340,12 +438,117 @@ export default function SettingsPage() {
       </section>
 
       <section style={styles.card}>
-        <h2 style={{ marginTop: 0, marginBottom: 8 }}>Timezone</h2>
-        <p style={{ margin: 0, color: "#6a7892", lineHeight: 1.55 }}>
-          The system timezone is fixed to{" "}
-          <strong>{timezone || "Europe/Warsaw"}</strong>. This keeps
-          duplicate-day calculations and Analytics date filters consistent.
+        <h2 style={{ marginTop: 0, marginBottom: 8 }}>
+          Project Timezone
+        </h2>
+
+        <p
+          style={{
+            marginTop: 0,
+            color: "#6a7892",
+            lineHeight: 1.55,
+          }}
+        >
+          Choose the timezone used by the whole project for Analytics date
+          filters and the Same Day duplicate rule. You can search by typing
+          a city or region, just like a computer timezone setting.
         </p>
+
+        <div style={{ marginTop: 22, maxWidth: 620 }}>
+          <label
+            htmlFor="project-timezone"
+            style={{
+              display: "block",
+              marginBottom: 8,
+              fontWeight: 800,
+            }}
+          >
+            Timezone
+          </label>
+
+          <input
+            id="project-timezone"
+            list="timezone-options"
+            style={styles.select}
+            value={timezone}
+            disabled={saving}
+            placeholder="Example: Europe/Warsaw"
+            autoComplete="off"
+            onChange={(event) => {
+              setTimezone(event.target.value);
+              setMessage("");
+              setMessageType("");
+            }}
+          />
+
+          <datalist id="timezone-options">
+            {TIMEZONE_OPTIONS.map((item) => (
+              <option key={item} value={item} />
+            ))}
+          </datalist>
+
+          <div
+            style={{
+              marginTop: 12,
+              display: "flex",
+              gap: 10,
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            <button
+              type="button"
+              style={styles.button}
+              disabled={saving}
+              onClick={() => {
+                const detected =
+                  Intl.DateTimeFormat()
+                    .resolvedOptions()
+                    .timeZone || "";
+
+                if (detected && isValidTimezone(detected)) {
+                  setTimezone(detected);
+                  setMessage("");
+                  setMessageType("");
+                } else {
+                  setMessage(
+                    "Could not detect this device timezone."
+                  );
+                  setMessageType("error");
+                }
+              }}
+            >
+              Use This Device Timezone
+            </button>
+
+            <span
+              style={{
+                fontSize: 14,
+                color: "#6a7892",
+              }}
+            >
+              Current saved timezone:{" "}
+              <strong>{savedTimezone}</strong>
+            </span>
+          </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              background: "#f7f9fd",
+              border: "1px solid #e1e8f3",
+              borderRadius: 10,
+              color: "#566781",
+              lineHeight: 1.5,
+            }}
+          >
+            Changing this timezone affects the whole project. It changes
+            Analytics day boundaries and the Same Day duplicate calculation.
+            Duration windows such as 24 Hours, 3 Days and 7 Days continue to
+            use elapsed time.
+          </div>
+        </div>
       </section>
 
       {message && (
