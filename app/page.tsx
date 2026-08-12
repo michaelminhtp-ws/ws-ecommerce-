@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
+import Script from 'next/script';
 import { siteConfig, type IconName } from '../lib/siteConfig';
 
 function BaseIcon({
@@ -259,6 +260,23 @@ function QuickStatIcon({
 }
 
 const WHATSAPP_REDIRECT_URL = 'https://api.devopsbyteflexshift.com/go';
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+
+type MetaPixelWindow = Window & {
+  fbq?: (...args: unknown[]) => void;
+};
+
+function trackMetaEvent(eventName: string) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const metaWindow = window as MetaPixelWindow;
+
+  if (typeof metaWindow.fbq === 'function') {
+    metaWindow.fbq('track', eventName);
+  }
+}
 
 function CTA({ label }: { label: string }) {
   return (
@@ -266,6 +284,7 @@ function CTA({ label }: { label: string }) {
       className="cta"
       type="button"
       onClick={() => {
+        trackMetaEvent('Contact');
         window.location.href = WHATSAPP_REDIRECT_URL;
       }}
     >
@@ -321,6 +340,28 @@ export default function Home() {
 
   return (
     <main className="pageShell">
+      {META_PIXEL_ID && (
+        <Script
+          id="meta-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${META_PIXEL_ID}');
+              fbq('track', 'PageView');
+              fbq('track', 'ViewContent');
+            `,
+          }}
+        />
+      )}
+
       {config.sections.showTicker && (
         <div className="ticker" aria-label={config.ticker.ariaLabel}>
           <div className="tickerTrack">{config.ticker.text}</div>
