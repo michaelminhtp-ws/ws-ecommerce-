@@ -91,7 +91,7 @@ export default function AdminPage() {
   }
 
   const pageStyle: React.CSSProperties = {
-    maxWidth: 760,
+    maxWidth: 900,
     margin: "70px auto",
     padding: "0 20px",
     fontFamily:
@@ -134,6 +134,15 @@ export default function AdminPage() {
     color: "#ffffff",
     cursor: "pointer",
     fontWeight: 800,
+  };
+
+  const dashboardCardStyle: React.CSSProperties = {
+    border: "1px solid #dce5f2",
+    borderRadius: 14,
+    padding: 18,
+    background: "#f9fbff",
+    height: "100%",
+    boxSizing: "border-box",
   };
 
   if (checkingSession) {
@@ -200,16 +209,10 @@ export default function AdminPage() {
               href="/admin/content"
               style={{
                 textDecoration: "none",
+                color: "inherit",
               }}
             >
-              <div
-                style={{
-                  border: "1px solid #dce5f2",
-                  borderRadius: 14,
-                  padding: 18,
-                  background: "#f9fbff",
-                }}
-              >
+              <div style={dashboardCardStyle}>
                 <h2
                   style={{
                     marginTop: 0,
@@ -239,16 +242,10 @@ export default function AdminPage() {
               href="/admin/whatsapp"
               style={{
                 textDecoration: "none",
+                color: "inherit",
               }}
             >
-              <div
-                style={{
-                  border: "1px solid #dce5f2",
-                  borderRadius: 14,
-                  padding: 18,
-                  background: "#f9fbff",
-                }}
-              >
+              <div style={dashboardCardStyle}>
                 <h2
                   style={{
                     marginTop: 0,
@@ -270,6 +267,39 @@ export default function AdminPage() {
 
                 <button style={primaryButtonStyle}>
                   Manage WhatsApp
+                </button>
+              </div>
+            </a>
+
+            <a
+              href="/admin/analytics"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <div style={dashboardCardStyle}>
+                <h2
+                  style={{
+                    marginTop: 0,
+                    marginBottom: 8,
+                  }}
+                >
+                  Analytics
+                </h2>
+
+                <p
+                  style={{
+                    marginTop: 0,
+                    color: "#6a7892",
+                  }}
+                >
+                  View WhatsApp clicks, unique IPs,
+                  duplicate IPs and click activity.
+                </p>
+
+                <button style={primaryButtonStyle}>
+                  View Analytics
                 </button>
               </div>
             </a>
