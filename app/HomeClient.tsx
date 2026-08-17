@@ -294,8 +294,17 @@ function CTA({ label }: { label: string }) {
   );
 }
 
-function formatSalary(min: number, max: number, currency: string) {
-  return `${min.toLocaleString('pl-PL')}–${max.toLocaleString('pl-PL')} ${currency}`;
+function formatSalary(
+  min: number,
+  max: number,
+  currency: string,
+  locale: string,
+) {
+  const safeLocale = locale || 'en-US';
+
+  return `${min.toLocaleString(safeLocale)}–${max.toLocaleString(
+    safeLocale,
+  )} ${currency}`;
 }
 
 export default function HomeClient({
@@ -306,10 +315,11 @@ export default function HomeClient({
   const [config] = useState(initialConfig);
 
   const salaryText = formatSalary(
-    config.salary.minimum,
-    config.salary.maximum,
-    config.general.currency,
-  );
+  config.salary.minimum,
+  config.salary.maximum,
+  config.general.currency,
+  config.general.locale,
+);
 
   return (
     <main className="pageShell">
@@ -417,8 +427,10 @@ export default function HomeClient({
               <div className="salaryCompare">
                 <span>{config.salary.comparisonLabel}</span>
                 <strong>
-                  {config.salary.comparisonValue.toLocaleString('pl-PL')}{' '}
-                  {config.general.currency}
+                  {config.salary.comparisonValue.toLocaleString(
+  config.general.locale || 'en-US',
+)}{' '}
+{config.general.currency}
                 </strong>
               </div>
             )}
