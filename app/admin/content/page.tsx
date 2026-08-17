@@ -239,13 +239,41 @@ export default function AdminContentPage() {
       </div>
 
       <section style={box}>
-        <h2>General</h2>
-        <div style={grid}>
-          {[["country","Country"],["language","Language"],["currency","Currency"],["timezone","Timezone"],["pageTitle","Page title"]].map(([key,label]) => (
-            <label key={key}><b>{label}</b><input style={input} value={content.general?.[key] ?? ""} onChange={(e)=>update(["general",key],e.target.value)} /></label>
-          ))}
-        </div>
-      </section>
+  <h2>General</h2>
+
+  <div style={grid}>
+    {[
+      ["country", "Country"],
+      ["language", "Language"],
+      ["languageCode", "Language code"],
+      ["locale", "Locale"],
+      ["currency", "Currency"],
+      ["pageTitle", "Page title"],
+    ].map(([key, label]) => (
+      <label key={key}>
+        <b>{label}</b>
+        <input
+          style={input}
+          value={content.general?.[key] ?? ""}
+          onChange={(e) =>
+            update(["general", key], e.target.value)
+          }
+        />
+      </label>
+    ))}
+
+    <label style={{ gridColumn: "1 / -1" }}>
+      <b>Meta description</b>
+      <textarea
+        style={textarea}
+        value={content.general?.metaDescription ?? ""}
+        onChange={(e) =>
+          update(["general", "metaDescription"], e.target.value)
+        }
+      />
+    </label>
+  </div>
+</section>
 
       <section style={box}>
         <h2>Brand</h2>
