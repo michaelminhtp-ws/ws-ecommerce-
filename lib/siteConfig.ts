@@ -19,12 +19,15 @@ export type IconName =
 
 export const siteConfig = {
   general: {
-    country: 'Poland',
-    language: 'Polish',
-    currency: 'PLN',
-    timezone: 'Europe/Warsaw',
-    pageTitle: 'Asystent E-Commerce',
-  },
+  country: 'Poland',
+  language: 'Polish',
+  languageCode: 'pl',
+  locale: 'pl-PL',
+  currency: 'PLN',
+  pageTitle: 'Asystent E-Commerce',
+  metaDescription:
+    'Oferta pracy dla Asystenta E-Commerce — elastyczna forma pracy, szkolenie i wsparcie.',
+},
 
   sections: {
     showTicker: true,
