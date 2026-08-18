@@ -354,7 +354,21 @@ export default function HomeClient({
       <section className="hero glassCard">
         <div className="heroBrandRow">
           <div className="brandIdentity">
-            <div className="brandLogo" aria-label={config.brand.logoAlt}>
+           <div
+  className="brandLogo"
+  aria-label={config.brand.logoAlt}
+  style={{
+    width: 72,
+    height: 72,
+    minWidth: 72,
+    minHeight: 72,
+    borderRadius: '18px',
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }}
+>
   {config.brand.logoImageUrl ? (
     <img
       src={config.brand.logoImageUrl}
