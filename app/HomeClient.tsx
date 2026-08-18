@@ -549,7 +549,20 @@ export default function HomeClient({
           {config.reviews.map((review) => (
             <article className="reviewCard glassCard" key={review.name}>
               <div className="reviewHead">
-                <div className="avatar">
+                <div
+  className="avatar"
+  style={{
+    width: 56,
+    height: 56,
+    minWidth: 56,
+    minHeight: 56,
+    borderRadius: '50%',
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }}
+>
   {review.imageUrl ? (
     <img
       src={review.imageUrl}
@@ -558,7 +571,7 @@ export default function HomeClient({
         width: '100%',
         height: '100%',
         objectFit: 'cover',
-        borderRadius: '50%',
+        objectPosition: 'center',
         display: 'block',
       }}
     />
