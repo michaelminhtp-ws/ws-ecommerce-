@@ -278,7 +278,14 @@ export default function AdminContentPage() {
       <section style={box}>
         <h2>Brand</h2>
         <div style={grid}>
-          {[["companyName","Company name"],["subtitle","Subtitle"],["startBadge","Start badge"],["logoAlt","Logo alt text"],["logoFallbackText","Logo fallback letter"]].map(([key,label]) => (
+          {[
+  ["companyName", "Company name"],
+  ["subtitle", "Subtitle"],
+  ["startBadge", "Start badge"],
+  ["logoImageUrl", "Logo Image URL"],
+  ["logoAlt", "Logo alt text"],
+  ["logoFallbackText", "Logo fallback letter"],
+].map(([key,label]) => (
             <label key={key}><b>{label}</b><input style={input} value={content.brand?.[key] ?? ""} onChange={(e)=>update(["brand",key],e.target.value)} /></label>
           ))}
         </div>
