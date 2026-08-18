@@ -355,8 +355,21 @@ export default function HomeClient({
         <div className="heroBrandRow">
           <div className="brandIdentity">
             <div className="brandLogo" aria-label={config.brand.logoAlt}>
-              {config.brand.logoFallbackText}
-            </div>
+  {config.brand.logoImageUrl ? (
+    <img
+      src={config.brand.logoImageUrl}
+      alt={config.brand.logoAlt}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
+        display: 'block',
+      }}
+    />
+  ) : (
+    config.brand.logoFallbackText
+  )}
+</div>
 
             <div>
               <div className="brandName">{config.brand.companyName}</div>
@@ -536,7 +549,23 @@ export default function HomeClient({
           {config.reviews.map((review) => (
             <article className="reviewCard glassCard" key={review.name}>
               <div className="reviewHead">
-                <div className="avatar">{review.initials}</div>
+                <div className="avatar">
+  {review.imageUrl ? (
+    <img
+      src={review.imageUrl}
+      alt={review.name}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        borderRadius: '50%',
+        display: 'block',
+      }}
+    />
+  ) : (
+    review.initials
+  )}
+</div>
 
                 <div>
                   <strong>{review.name}</strong>
