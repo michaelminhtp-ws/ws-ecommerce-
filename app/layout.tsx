@@ -1,53 +1,52 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { siteConfig } from '../lib/siteConfig';
+// app/layout.tsx
+import "./globals.css";
+import type { Metadata } from "next";
+import MetaPixel from "@/components/MetaPixel";
+import TikTokPixel from "@/components/TikTokPixel";
 
-async function getPublishedGeneral() {
-  try {
-    const response = await fetch(
-      'https://api.devopsbyteflexshift.com/api/site-content',
-      {
-        cache: 'no-store',
-      },
-    );
+export const metadata: Metadata = {
+  title: "HirePro Polska | Elastyczna praca online",
 
-    if (!response.ok) {
-      return siteConfig.general;
-    }
+  description:
+    "Poznaj elastyczne możliwości pracy online w Polsce. Pracuj zdalnie i znajdź odpowiednie opcje pracy na pełny lub niepełny etat.",
 
-    const data = await response.json();
+  openGraph: {
+    title: "HirePro Polska | Elastyczna praca online",
 
-    return data?.ok === true && data?.content?.general
-      ? data.content.general
-      : siteConfig.general;
-  } catch {
-    return siteConfig.general;
-  }
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  const general = await getPublishedGeneral();
-
-  return {
-    title: general.pageTitle || siteConfig.general.pageTitle,
     description:
-      general.metaDescription || siteConfig.general.metaDescription,
-  };
-}
+      "Poznaj elastyczne możliwości pracy online w Polsce. Pracuj zdalnie i znajdź odpowiednie opcje pracy na pełny lub niepełny etat.",
 
-export default async function RootLayout({
+    url: "https://www.intelhirepropl.com/",
+
+    siteName: "HirePro Polska",
+
+    locale: "pl_PL",
+
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title: "HirePro Polska | Elastyczna praca online",
+
+    description:
+      "Poznaj elastyczne możliwości pracy online w Polsce. Pracuj zdalnie i znajdź odpowiednie opcje pracy na pełny lub niepełny etat.",
+  },
+};
+
+export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const general = await getPublishedGeneral();
-
-  const languageCode =
-    general.languageCode || siteConfig.general.languageCode || 'en';
-
+}) {
   return (
-    <html lang={languageCode}>
-      <body>{children}</body>
+    <html lang="pl">
+      <body>
+        <MetaPixel />
+        <TikTokPixel />
+        {children}
+      </body>
     </html>
   );
 }
