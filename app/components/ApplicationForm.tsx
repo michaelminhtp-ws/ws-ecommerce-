@@ -3,24 +3,55 @@
 import React, { useMemo, useState } from "react";
 import { CheckCircle2, Send } from "lucide-react";
 import { fbqTrack } from "@/lib/pixel";
-import { ttqTrack } from "@/lib/tiktok";
 
 const BOT_USERNAME =
   process.env.NEXT_PUBLIC_BOT_USERNAME || "Asignr_aciondetarea_bot";
 
 const COUNTRIES = [
+  // Main market / Spanish-speaking LATAM first
   { iso: "co", name: "Colombia", dial: "+57", flag: "🇨🇴" },
   { iso: "ve", name: "Venezuela", dial: "+58", flag: "🇻🇪" },
   { iso: "ec", name: "Ecuador", dial: "+593", flag: "🇪🇨" },
   { iso: "pe", name: "Perú", dial: "+51", flag: "🇵🇪" },
   { iso: "pa", name: "Panamá", dial: "+507", flag: "🇵🇦" },
-  { iso: "br", name: "Brasil", dial: "+55", flag: "🇧🇷" },
   { iso: "mx", name: "México", dial: "+52", flag: "🇲🇽" },
   { iso: "ar", name: "Argentina", dial: "+54", flag: "🇦🇷" },
   { iso: "cl", name: "Chile", dial: "+56", flag: "🇨🇱" },
   { iso: "bo", name: "Bolivia", dial: "+591", flag: "🇧🇴" },
-  { iso: "us", name: "EE. UU./Canadá", dial: "+1", flag: "🇺🇸" },
+  { iso: "py", name: "Paraguay", dial: "+595", flag: "🇵🇾" },
+  { iso: "uy", name: "Uruguay", dial: "+598", flag: "🇺🇾" },
+  { iso: "gt", name: "Guatemala", dial: "+502", flag: "🇬🇹" },
+  { iso: "hn", name: "Honduras", dial: "+504", flag: "🇭🇳" },
+  { iso: "sv", name: "El Salvador", dial: "+503", flag: "🇸🇻" },
+  { iso: "ni", name: "Nicaragua", dial: "+505", flag: "🇳🇮" },
+  { iso: "cr", name: "Costa Rica", dial: "+506", flag: "🇨🇷" },
+  { iso: "do", name: "República Dominicana", dial: "+1", flag: "🇩🇴" },
+  { iso: "cu", name: "Cuba", dial: "+53", flag: "🇨🇺" },
   { iso: "es", name: "España", dial: "+34", flag: "🇪🇸" },
+
+  // Existing countries kept from the original HirePro form
+  { iso: "de", name: "Alemania", dial: "+49", flag: "🇩🇪" },
+  { iso: "pl", name: "Polonia", dial: "+48", flag: "🇵🇱" },
+  { iso: "in", name: "India", dial: "+91", flag: "🇮🇳" },
+  { iso: "tr", name: "Turquía", dial: "+90", flag: "🇹🇷" },
+  { iso: "sy", name: "Siria", dial: "+963", flag: "🇸🇾" },
+  { iso: "us", name: "EE. UU. / Canadá", dial: "+1", flag: "🇺🇸" },
+  { iso: "my", name: "Malasia", dial: "+60", flag: "🇲🇾" },
+  { iso: "id", name: "Indonesia", dial: "+62", flag: "🇮🇩" },
+  { iso: "ph", name: "Filipinas", dial: "+63", flag: "🇵🇭" },
+  { iso: "vn", name: "Vietnam", dial: "+84", flag: "🇻🇳" },
+  { iso: "th", name: "Tailandia", dial: "+66", flag: "🇹🇭" },
+  { iso: "mm", name: "Myanmar", dial: "+95", flag: "🇲🇲" },
+  { iso: "bd", name: "Bangladés", dial: "+880", flag: "🇧🇩" },
+  { iso: "pk", name: "Pakistán", dial: "+92", flag: "🇵🇰" },
+  { iso: "np", name: "Nepal", dial: "+977", flag: "🇳🇵" },
+  { iso: "lk", name: "Sri Lanka", dial: "+94", flag: "🇱🇰" },
+  { iso: "au", name: "Australia", dial: "+61", flag: "🇦🇺" },
+  { iso: "za", name: "Sudáfrica", dial: "+27", flag: "🇿🇦" },
+  { iso: "fr", name: "Francia", dial: "+33", flag: "🇫🇷" },
+  { iso: "gb", name: "Reino Unido", dial: "+44", flag: "🇬🇧" },
+  { iso: "ae", name: "Emiratos Árabes Unidos", dial: "+971", flag: "🇦🇪" },
+  { iso: "sg", name: "Singapur", dial: "+65", flag: "🇸🇬" },
 ];
 
 const isMobile = () =>
@@ -126,15 +157,19 @@ export default function ApplicationForm() {
     const ageNum = Number(age || "0");
 
     if (!name.trim()) {
-      return setError("Ingresa tu nombre completo.");
+      return setError("Ingresa tu nombre.");
     }
 
     if (!phoneE164) {
-      return setError("Ingresa el número de teléfono que usas en Telegram.");
+      return setError(
+        "Ingresa el número de teléfono que utilizas en Telegram."
+      );
     }
 
     if (!ageNum || ageNum < 23 || ageNum > 99) {
-      return setError("Ingresa una edad válida entre 23 y 99 años.");
+      return setError(
+        "Ingresa una edad válida. El rango permitido es de 23 a 99 años."
+      );
     }
 
     const payload = {
@@ -165,17 +200,13 @@ export default function ApplicationForm() {
         .catch(() => null)) as LeadApiResponse | null;
 
       if (!response.ok || !data?.ok) {
-        throw new Error(data?.error || "No se pudo guardar la solicitud.");
+        throw new Error(
+          data?.error || "No se pudo guardar la solicitud."
+        );
       }
 
-      try {
-        ttqTrack("SubmitApplication", {
-          action: "application_saved",
-        });
-      } catch {
-        // El flujo debe continuar aunque TikTok no esté disponible.
-      }
-
+      // Keep the existing HirePro conversion flow:
+      // conversion events fire only after the user chooses to continue in Telegram.
       setSubmittedIsNew(data.isNew === true);
       setSubmittedLeadId(typeof data.id === "number" ? data.id : null);
       setSubmittedPhoneE164(data.phone_e164 || phoneE164);
@@ -183,7 +214,9 @@ export default function ApplicationForm() {
       setSaving(false);
     } catch {
       setSaving(false);
-      setError("No se pudo guardar la solicitud. Inténtalo de nuevo.");
+      setError(
+        "No se pudo guardar la solicitud. Inténtalo de nuevo."
+      );
     }
   };
 
@@ -212,30 +245,26 @@ export default function ApplicationForm() {
             keepalive: true,
           });
         } catch {
-          // Los eventos del navegador y Telegram pueden continuar.
+          // Meta events and Telegram can still continue if DB event recording fails.
         }
       }
 
       try {
-        fbqTrack("Lead", { action: "telegram_continue" });
-      } catch {}
-
-      try {
-        ttqTrack("Lead", { action: "telegram_continue" });
-      } catch {}
+        fbqTrack("Lead", {
+          action: "telegram_continue",
+        });
+      } catch {
+        // Telegram can still open if the browser pixel event cannot be sent.
+      }
 
       if (submittedIsNew) {
         try {
           fbqTrack("CompleteRegistration", {
             action: "unique_phone_telegram_continue",
           });
-        } catch {}
-
-        try {
-          ttqTrack("CompleteRegistration", {
-            action: "unique_phone_telegram_continue",
-          });
-        } catch {}
+        } catch {
+          // Telegram can still open if the browser pixel event cannot be sent.
+        }
       }
 
       setConversionSent(true);
@@ -252,19 +281,25 @@ export default function ApplicationForm() {
     "mt-1.5 w-full h-11 rounded-xl border border-[#59616b] bg-[#0f1216] px-3 text-[#f5f5f5] placeholder:text-[#737983] shadow-inner transition focus:border-[var(--brand)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-ring)] disabled:cursor-not-allowed disabled:opacity-60 sm:h-12";
 
   return (
-    <form id="apply" onSubmit={handleSubmit} className="mx-auto w-full max-w-3xl scroll-mt-20">
+    <form
+      id="apply"
+      onSubmit={handleSubmit}
+      className="mx-auto w-full max-w-3xl scroll-mt-20"
+    >
       <div className="rounded-2xl border border-[#3c434b] bg-[var(--surface)] p-4 shadow-2xl shadow-black/20 sm:p-6">
         <div className="mb-4 rounded-xl border border-[#5c4b12] bg-[#1a1710] px-3.5 py-2.5 text-xs leading-relaxed text-[#e6d9a9] sm:px-4 sm:py-3 sm:text-sm">
-          Nuestro equipo de selección contacta a los candidatos seleccionados por Telegram.
-          Usa el número de teléfono vinculado a tu cuenta de Telegram.
+          Nuestro equipo de reclutamiento se comunica con los candidatos
+          seleccionados por Telegram. Utiliza un número de teléfono vinculado a
+          tu cuenta de Telegram.
         </div>
 
         <label className="block text-sm font-semibold text-[#e8e8e8]">
           * Nombre completo
         </label>
+
         <input
           type="text"
-          placeholder="Ingresa tu nombre completo"
+          placeholder="Ingresa tu nombre"
           value={name}
           disabled={submitted}
           onChange={(e) => setName(e.target.value)}
@@ -380,13 +415,15 @@ export default function ApplicationForm() {
           >
             <div className="flex items-start gap-3">
               <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--brand)]" />
+
               <div>
                 <h3 className="m-0 text-base font-semibold text-white">
                   Solicitud enviada correctamente
                 </h3>
+
                 <p className="mt-2 text-sm leading-relaxed text-[#b8bdc5]">
-                  Tus datos han sido guardados. Para continuar con la solicitud,
-                  abre Telegram usando el botón de abajo. Asegúrate de tener
+                  Tus datos se han guardado. Para continuar con tu solicitud,
+                  abre Telegram con el botón de abajo. Asegúrate de tener
                   Telegram instalado en tu dispositivo.
                 </p>
               </div>
@@ -399,7 +436,7 @@ export default function ApplicationForm() {
                 className="btn-primary min-w-[250px] gap-2"
               >
                 <Send className="h-4 w-4" />
-                Continuar por Telegram
+                Continuar en Telegram
               </button>
             </div>
 
