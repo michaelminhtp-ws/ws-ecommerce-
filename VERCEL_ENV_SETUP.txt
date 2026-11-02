@@ -1,0 +1,11 @@
+Vercel Environment Variables for devopsbyteflexshift.com
+
+Required:
+API_BASE=https://api.devopsbyteflexshift.com
+NEXT_PUBLIC_BOT_USERNAME=Asignr_aciondetarea_bot
+
+Keep / set your tracking IDs as needed:
+NEXT_PUBLIC_META_PIXEL_ID=<your Meta pixel ID>
+NEXT_PUBLIC_TIKTOK_PIXEL_ID=<your TikTok pixel ID, or leave empty until created>
+
+After changing environment variables in Vercel, redeploy the project.

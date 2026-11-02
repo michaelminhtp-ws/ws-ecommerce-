@@ -6,31 +6,21 @@ import { fbqTrack } from "@/lib/pixel";
 import { ttqTrack } from "@/lib/tiktok";
 
 const BOT_USERNAME =
-  process.env.NEXT_PUBLIC_BOT_USERNAME || "applyyourjobhere_bot";
+  process.env.NEXT_PUBLIC_BOT_USERNAME || "Asignr_aciondetarea_bot";
 
 const COUNTRIES = [
-  { iso: "pl", name: "Polska", dial: "+48", flag: "🇵🇱" },
-  { iso: "de", name: "Niemcy", dial: "+49", flag: "🇩🇪" },
-  { iso: "in", name: "Indie", dial: "+91", flag: "🇮🇳" },
-  { iso: "tr", name: "Turcja", dial: "+90", flag: "🇹🇷" },
-  { iso: "sy", name: "Syria", dial: "+963", flag: "🇸🇾" },
-  { iso: "us", name: "USA/Kanada", dial: "+1", flag: "🇺🇸" },
-  { iso: "my", name: "Malezja", dial: "+60", flag: "🇲🇾" },
-  { iso: "id", name: "Indonezja", dial: "+62", flag: "🇮🇩" },
-  { iso: "ph", name: "Filipiny", dial: "+63", flag: "🇵🇭" },
-  { iso: "vn", name: "Wietnam", dial: "+84", flag: "🇻🇳" },
-  { iso: "th", name: "Tajlandia", dial: "+66", flag: "🇹🇭" },
-  { iso: "mm", name: "Mjanma", dial: "+95", flag: "🇲🇲" },
-  { iso: "bd", name: "Bangladesz", dial: "+880", flag: "🇧🇩" },
-  { iso: "pk", name: "Pakistan", dial: "+92", flag: "🇵🇰" },
-  { iso: "np", name: "Nepal", dial: "+977", flag: "🇳🇵" },
-  { iso: "lk", name: "Sri Lanka", dial: "+94", flag: "🇱🇰" },
-  { iso: "au", name: "Australia", dial: "+61", flag: "🇦🇺" },
-  { iso: "za", name: "Republika Południowej Afryki", dial: "+27", flag: "🇿🇦" },
-  { iso: "fr", name: "Francja", dial: "+33", flag: "🇫🇷" },
-  { iso: "gb", name: "Wielka Brytania", dial: "+44", flag: "🇬🇧" },
-  { iso: "ae", name: "Zjednoczone Emiraty Arabskie", dial: "+971", flag: "🇦🇪" },
-  { iso: "sg", name: "Singapur", dial: "+65", flag: "🇸🇬" },
+  { iso: "co", name: "Colombia", dial: "+57", flag: "🇨🇴" },
+  { iso: "ve", name: "Venezuela", dial: "+58", flag: "🇻🇪" },
+  { iso: "ec", name: "Ecuador", dial: "+593", flag: "🇪🇨" },
+  { iso: "pe", name: "Perú", dial: "+51", flag: "🇵🇪" },
+  { iso: "pa", name: "Panamá", dial: "+507", flag: "🇵🇦" },
+  { iso: "br", name: "Brasil", dial: "+55", flag: "🇧🇷" },
+  { iso: "mx", name: "México", dial: "+52", flag: "🇲🇽" },
+  { iso: "ar", name: "Argentina", dial: "+54", flag: "🇦🇷" },
+  { iso: "cl", name: "Chile", dial: "+56", flag: "🇨🇱" },
+  { iso: "bo", name: "Bolivia", dial: "+591", flag: "🇧🇴" },
+  { iso: "us", name: "EE. UU./Canadá", dial: "+1", flag: "🇺🇸" },
+  { iso: "es", name: "España", dial: "+34", flag: "🇪🇸" },
 ];
 
 const isMobile = () =>
@@ -136,19 +126,15 @@ export default function ApplicationForm() {
     const ageNum = Number(age || "0");
 
     if (!name.trim()) {
-      return setError("Wpisz swoje imię i nazwisko.");
+      return setError("Ingresa tu nombre completo.");
     }
 
     if (!phoneE164) {
-      return setError(
-        "Wpisz numer telefonu, którego używasz w Telegramie."
-      );
+      return setError("Ingresa el número de teléfono que usas en Telegram.");
     }
 
     if (!ageNum || ageNum < 23 || ageNum > 99) {
-      return setError(
-        "Wpisz prawidłowy wiek od 23 do 99 lat."
-      );
+      return setError("Ingresa una edad válida entre 23 y 99 años.");
     }
 
     const payload = {
@@ -179,23 +165,17 @@ export default function ApplicationForm() {
         .catch(() => null)) as LeadApiResponse | null;
 
       if (!response.ok || !data?.ok) {
-        throw new Error(
-          data?.error || "Nie udało się zapisać aplikacji."
-        );
+        throw new Error(data?.error || "No se pudo guardar la solicitud.");
       }
 
-      // Meta conversion events are intentionally NOT fired here.
-      // TikTok records the successful application submission at this stage.
       try {
         ttqTrack("SubmitApplication", {
           action: "application_saved",
         });
       } catch {
-        // The application flow must continue even if TikTok tracking is unavailable.
+        // El flujo debe continuar aunque TikTok no esté disponible.
       }
 
-      // Meta Lead / CompleteRegistration and TikTok Lead / CompleteRegistration
-      // fire only after the applicant confirms they want to continue in Telegram.
       setSubmittedIsNew(data.isNew === true);
       setSubmittedLeadId(typeof data.id === "number" ? data.id : null);
       setSubmittedPhoneE164(data.phone_e164 || phoneE164);
@@ -203,9 +183,7 @@ export default function ApplicationForm() {
       setSaving(false);
     } catch {
       setSaving(false);
-      setError(
-        "Nie udało się zapisać aplikacji. Bitte versuchen Sie es erneut."
-      );
+      setError("No se pudo guardar la solicitud. Inténtalo de nuevo.");
     }
   };
 
@@ -234,42 +212,30 @@ export default function ApplicationForm() {
             keepalive: true,
           });
         } catch {
-          // Meta events and Telegram can still continue if DB event recording fails.
+          // Los eventos del navegador y Telegram pueden continuar.
         }
       }
 
       try {
-        fbqTrack("Lead", {
-          action: "telegram_continue",
-        });
-      } catch {
-        // Telegram can still open if the browser pixel event cannot be sent.
-      }
+        fbqTrack("Lead", { action: "telegram_continue" });
+      } catch {}
 
       try {
-        ttqTrack("Lead", {
-          action: "telegram_continue",
-        });
-      } catch {
-        // Telegram can still open if TikTok tracking is unavailable.
-      }
+        ttqTrack("Lead", { action: "telegram_continue" });
+      } catch {}
 
       if (submittedIsNew) {
         try {
           fbqTrack("CompleteRegistration", {
             action: "unique_phone_telegram_continue",
           });
-        } catch {
-          // Telegram can still open if the browser pixel event cannot be sent.
-        }
+        } catch {}
 
         try {
           ttqTrack("CompleteRegistration", {
             action: "unique_phone_telegram_continue",
           });
-        } catch {
-          // Telegram can still open if TikTok tracking is unavailable.
-        }
+        } catch {}
       }
 
       setConversionSent(true);
@@ -289,17 +255,16 @@ export default function ApplicationForm() {
     <form id="apply" onSubmit={handleSubmit} className="mx-auto w-full max-w-3xl scroll-mt-20">
       <div className="rounded-2xl border border-[#3c434b] bg-[var(--surface)] p-4 shadow-2xl shadow-black/20 sm:p-6">
         <div className="mb-4 rounded-xl border border-[#5c4b12] bg-[#1a1710] px-3.5 py-2.5 text-xs leading-relaxed text-[#e6d9a9] sm:px-4 sm:py-3 sm:text-sm">
-          Nasz zespół rekrutacyjny kontaktuje się z wybranymi kandydatami przez Telegram.
-          Użyj numeru telefonu powiązanego z Twoim kontem Telegram
-          .
+          Nuestro equipo de selección contacta a los candidatos seleccionados por Telegram.
+          Usa el número de teléfono vinculado a tu cuenta de Telegram.
         </div>
 
         <label className="block text-sm font-semibold text-[#e8e8e8]">
-          * Imię i nazwisko
+          * Nombre completo
         </label>
         <input
           type="text"
-          placeholder="Wpisz imię i nazwisko"
+          placeholder="Ingresa tu nombre completo"
           value={name}
           disabled={submitted}
           onChange={(e) => setName(e.target.value)}
@@ -307,7 +272,7 @@ export default function ApplicationForm() {
         />
 
         <label className="mt-4 block text-sm font-semibold text-[#e8e8e8]">
-          * Numer telefonu w Telegramie
+          * Número de teléfono de Telegram
         </label>
 
         <div className="mt-1.5 grid grid-cols-[0.95fr_1.05fr] gap-2 sm:grid-cols-10 sm:gap-3">
@@ -332,7 +297,7 @@ export default function ApplicationForm() {
           <input
             type="tel"
             inputMode="numeric"
-            placeholder="Wpisz numer telefonu"
+            placeholder="Ingresa tu número"
             value={phone}
             disabled={submitted}
             onChange={(e) => setPhone(e.target.value)}
@@ -341,12 +306,12 @@ export default function ApplicationForm() {
         </div>
 
         <p className="mt-1.5 text-[11px] text-[#8f959e] sm:text-xs">
-          Ten numer będzie używany w Telegramie:&nbsp;
+          Este número se utilizará para la verificación en Telegram:&nbsp;
           <strong className="text-[#c9cdd2]">{phoneE164 || "—"}</strong>
         </p>
 
         <label className="mt-4 block text-sm font-semibold text-[#e8e8e8]">
-          * Płeć
+          * Género
         </label>
 
         <div className="mt-2 flex flex-wrap items-center gap-5 text-sm text-[#d7d9dc]">
@@ -359,7 +324,7 @@ export default function ApplicationForm() {
               onChange={() => setGender("male")}
               className="accent-[#f0b90b]"
             />
-            <span>Mężczyzna</span>
+            <span>Hombre</span>
           </label>
 
           <label className="inline-flex items-center gap-2">
@@ -371,19 +336,19 @@ export default function ApplicationForm() {
               onChange={() => setGender("female")}
               className="accent-[#f0b90b]"
             />
-            <span>Kobieta</span>
+            <span>Mujer</span>
           </label>
         </div>
 
         <label className="mt-4 block text-sm font-semibold text-[#e8e8e8]">
-          * Wiek
+          * Edad
         </label>
 
         <input
           type="number"
           min={23}
           max={99}
-          placeholder="Wpisz swój wiek"
+          placeholder="Ingresa tu edad"
           value={age}
           disabled={submitted}
           onChange={(e) => setAge(e.target.value)}
@@ -397,7 +362,7 @@ export default function ApplicationForm() {
               disabled={saving}
               className="btn-primary min-w-[220px] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {saving ? "Zapisywanie…" : "Wyślij aplikację"}
+              {saving ? "Guardando…" : "Enviar solicitud"}
             </button>
           </div>
         )}
@@ -417,13 +382,12 @@ export default function ApplicationForm() {
               <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--brand)]" />
               <div>
                 <h3 className="m-0 text-base font-semibold text-white">
-                  Aplikacja została pomyślnie przesłana
+                  Solicitud enviada correctamente
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#b8bdc5]">
-                  Twoje dane zostały zapisane. Aby kontynuować aplikację,
-                  otwórz Telegram za pomocą przycisku poniżej.
-                  Upewnij się, że Telegram jest zainstalowany na Twoim
-                  urządzeniu.
+                  Tus datos han sido guardados. Para continuar con la solicitud,
+                  abre Telegram usando el botón de abajo. Asegúrate de tener
+                  Telegram instalado en tu dispositivo.
                 </p>
               </div>
             </div>
@@ -435,13 +399,12 @@ export default function ApplicationForm() {
                 className="btn-primary min-w-[250px] gap-2"
               >
                 <Send className="h-4 w-4" />
-                Kontynuuj przez Telegram
+                Continuar por Telegram
               </button>
             </div>
 
             <p className="mt-3 text-center text-xs text-[#8f959e]">
-              Telegram zostanie otwarty dopiero po wybraniu tego
-              przycisku.
+              Telegram se abrirá únicamente después de seleccionar este botón.
             </p>
           </div>
         )}

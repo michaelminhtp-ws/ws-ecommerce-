@@ -5,43 +5,29 @@ import MetaPixel from "@/components/MetaPixel";
 import TikTokPixel from "@/components/TikTokPixel";
 
 export const metadata: Metadata = {
-  title: "HirePro Polska | Elastyczna praca online",
-
+  title: "HirePro Colombia | Trabajo online flexible",
   description:
-    "Poznaj elastyczne możliwości pracy online w Polsce. Pracuj zdalnie i znajdź odpowiednie opcje pracy na pełny lub niepełny etat.",
-
+    "Descubre oportunidades flexibles de trabajo online en Colombia. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
   openGraph: {
-    title: "HirePro Polska | Elastyczna praca online",
-
+    title: "HirePro Colombia | Trabajo online flexible",
     description:
-      "Poznaj elastyczne możliwości pracy online w Polsce. Pracuj zdalnie i znajdź odpowiednie opcje pracy na pełny lub niepełny etat.",
-
-    url: "https://www.intelhirepropl.com/",
-
-    siteName: "HirePro Polska",
-
-    locale: "pl_PL",
-
+      "Descubre oportunidades flexibles de trabajo online en Colombia. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
+    url: "https://www.devopsbyteflexshift.com/",
+    siteName: "HirePro Colombia",
+    locale: "es_CO",
     type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
-
-    title: "HirePro Polska | Elastyczna praca online",
-
+    title: "HirePro Colombia | Trabajo online flexible",
     description:
-      "Poznaj elastyczne możliwości pracy online w Polsce. Pracuj zdalnie i znajdź odpowiednie opcje pracy na pełny lub niepełny etat.",
+      "Descubre oportunidades flexibles de trabajo online en Colombia. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pl">
+    <html lang="es">
       <body>
         <MetaPixel />
         <TikTokPixel />
