@@ -1,54 +1,81 @@
 "use client";
 
-import Script from "next/script";
-
-const FALLBACK_PIXEL_ID = "1615917750205764";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { getPixelIdForPath } from "@/lib/landing-config";
 
 declare global {
   interface Window {
     fbq?: (...args: any[]) => void;
     _fbq?: unknown;
-    __hireproMetaInitialized?: boolean;
-    __hireproPageViewSent?: boolean;
+    __hireproMetaBaseLoaded?: boolean;
+    __hireproMetaInitializedPixels?: Record<string, boolean>;
+    __hireproMetaPageViewsSent?: Record<string, boolean>;
+    __hireproActiveMetaPixelId?: string;
+  }
+}
+
+function ensureMetaBase() {
+  if (window.fbq) return;
+
+  const fbq: any = function (...args: any[]) {
+    if (fbq.callMethod) {
+      fbq.callMethod.apply(fbq, args);
+    } else {
+      fbq.queue.push(args);
+    }
+  };
+
+  if (!window._fbq) window._fbq = fbq;
+  fbq.push = fbq;
+  fbq.loaded = true;
+  fbq.version = "2.0";
+  fbq.queue = [];
+  window.fbq = fbq;
+
+  if (!window.__hireproMetaBaseLoaded) {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "https://connect.facebook.net/en_US/fbevents.js";
+    const firstScript = document.getElementsByTagName("script")[0];
+    firstScript?.parentNode?.insertBefore(script, firstScript);
+    window.__hireproMetaBaseLoaded = true;
   }
 }
 
 export default function MetaPixel() {
-  const PIXEL_ID =
-    process.env.NEXT_PUBLIC_META_PIXEL_ID || FALLBACK_PIXEL_ID;
+  const pathname = usePathname();
 
-  if (!PIXEL_ID) return null;
+  useEffect(() => {
+    const pixelId = getPixelIdForPath(pathname);
 
-  return (
-    <Script
-      id="meta-pixel-base"
-      strategy="afterInteractive"
-      dangerouslySetInnerHTML={{
-        __html: `
-          (function () {
-            if (!window.fbq) {
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-            }
+    if (!pixelId || pixelId.startsWith("PASTE_PIXEL_")) {
+      // A configured landing path with a placeholder must not silently fall
+      // back to another path's Pixel.
+      window.__hireproActiveMetaPixelId = undefined;
+      return;
+    }
 
-            if (!window.__hireproMetaInitialized) {
-              fbq('init', '${PIXEL_ID}');
-              window.__hireproMetaInitialized = true;
-            }
+    ensureMetaBase();
 
-            if (!window.__hireproPageViewSent) {
-              fbq('track', 'PageView');
-              window.__hireproPageViewSent = true;
-            }
-          })();
-        `,
-      }}
-    />
-  );
+    window.__hireproMetaInitializedPixels ||= {};
+    window.__hireproMetaPageViewsSent ||= {};
+
+    if (!window.__hireproMetaInitializedPixels[pixelId]) {
+      window.fbq?.("init", pixelId);
+      window.__hireproMetaInitializedPixels[pixelId] = true;
+    }
+
+    window.__hireproActiveMetaPixelId = pixelId;
+
+    const pageViewKey = `${pixelId}:${pathname || "/"}`;
+    if (!window.__hireproMetaPageViewsSent[pageViewKey]) {
+      // trackSingle is deliberate: if a browser visits more than one landing
+      // path in the same session, this PageView goes only to the active Pixel.
+      window.fbq?.("trackSingle", pixelId, "PageView");
+      window.__hireproMetaPageViewsSent[pageViewKey] = true;
+    }
+  }, [pathname]);
+
+  return null;
 }
