@@ -128,11 +128,11 @@ export default function Page() {
                 <ul className="space-y-2.5 text-sm leading-relaxed text-[#b6bbc3]">
                   <li>
                     Según el tipo y el alcance de las tareas, es posible obtener aproximadamente{" "}
-                    <strong>140.000–1.700.000 COP al día</strong>
+                    <strong>$42.000–$128.000 al día</strong>
                   </li>
                   <li>
                     En modalidad de medio tiempo se puede alcanzar aproximadamente{" "}
-                    <strong>8.000.000–11.500.000 COP brutos al mes</strong>
+                    <strong>$1.800.000–$2.100.000 brutos al mes</strong>
                   </li>
                   <li>Horarios flexibles según las tareas disponibles</li>
                   <li>Realiza tareas online cómodamente desde tu smartphone</li>
@@ -145,11 +145,11 @@ export default function Page() {
                 <ul className="space-y-2.5 text-sm leading-relaxed text-[#b6bbc3]">
                   <li>
                     En modalidad de tiempo completo se puede alcanzar aproximadamente{" "}
-                    <strong>15.500.000–21.000.000 COP brutos al mes</strong>
+                    <strong>$3.200.000–$5.800.000 brutos al mes</strong>
                   </li>
                   <li>
                     Según el tipo y el alcance de las tareas, es posible obtener hasta{" "}
-                    <strong>1.700.000 COP al día</strong>
+                    <strong>$122.000 al día</strong>
                   </li>
                   <li>Horarios flexibles según el tipo de trabajo</li>
                   <li>Las tareas online pueden realizarse desde un smartphone</li>
