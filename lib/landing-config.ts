@@ -45,7 +45,7 @@ export const LANDING_PAGES: Record<string, LandingConfig> = {
 };
 
 export const HOME_PIXEL_ID =
-  process.env.NEXT_PUBLIC_META_PIXEL_ID || "2184553425802563";
+  process.env.NEXT_PUBLIC_META_PIXEL_ID || "1491440352849492";
 
 export function getLandingConfig(slug?: string | null) {
   if (!slug) return null;
