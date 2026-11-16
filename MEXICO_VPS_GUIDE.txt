@@ -1,0 +1,39 @@
+HIREPRO MEXICO - VPS SETTINGS
+
+You do NOT need to edit the bot code or database.
+Only change these 3 environment settings on the LATAM VPS.
+
+1) Connect to your LATAM VPS.
+
+2) Run:
+cd /opt/hirepro-latam/app
+
+3) Check current values:
+grep -E '^(TIMEZONE|PHONE_COUNTRY_CODE|STATUS_REGION_NAME)=' .env
+
+4) Run this exact command:
+sed -i \
+-e 's|^TIMEZONE=.*|TIMEZONE=America/Mexico_City|' \
+-e 's|^PHONE_COUNTRY_CODE=.*|PHONE_COUNTRY_CODE=52|' \
+-e 's|^STATUS_REGION_NAME=.*|STATUS_REGION_NAME=Mexico|' \
+.env
+
+5) Verify:
+grep -E '^(TIMEZONE|PHONE_COUNTRY_CODE|STATUS_REGION_NAME)=' .env
+
+It should show:
+TIMEZONE=America/Mexico_City
+PHONE_COUNTRY_CODE=52
+STATUS_REGION_NAME=Mexico
+
+6) Restart the bot:
+pm2 restart hirepro-latam-bot --update-env
+
+7) In Telegram, test:
+/status
+
+It should say:
+Executive status (today, Mexico time):
+
+8) If correct, save PM2:
+pm2 save

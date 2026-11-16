@@ -64,7 +64,7 @@ export default function Page() {
         <section className="border-b border-[#20252b] bg-[radial-gradient(circle_at_top_right,_rgba(240,185,11,0.10),_transparent_38%)]">
           <div className="mx-auto max-w-4xl px-4 py-5 sm:px-6 sm:py-7 md:py-8">
             <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#50420e] bg-[#17140b] px-2.5 py-1 text-[11px] font-medium text-[#e6d9a9] sm:text-xs">
-              <span aria-hidden>🇨🇴</span>
+              <span aria-hidden>🇲🇽</span>
               México
             </div>
 
