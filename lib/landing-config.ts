@@ -13,34 +13,34 @@ export type LandingConfig = {
 // Uses NEXT_PUBLIC_META_PIXEL_ID from Vercel.
 //
 // Path pages:
-// /Co002 -> CO-Anan-002
-// /Co003 -> CO-Anan-003
-// /Co004 -> CO-Anan-004
+// /Mx002 -> MX-Anan-002
+// /Mx003 -> MX-Anan-003
+// /Mx004 -> MX-Anan-004
 //
 // Pixel IDs are public browser identifiers, not access tokens.
 export const LANDING_PAGES: Record<string, LandingConfig> = {
-  Co002: {
-    slug: "Co002",
+  Mx002: {
+    slug: "Mx002",
     pixelId: "1145438844674496",
-    title: "HirePro Colombia | Trabajo online flexible",
+    title: "HirePro México | Trabajo online flexible",
     description:
-      "Descubre oportunidades flexibles de trabajo online en Colombia. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
+      "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
   },
 
-  Co003: {
-    slug: "Co003",
+  Mx003: {
+    slug: "Mx003",
     pixelId: "1115162561371096",
-    title: "HirePro Colombia | Trabajo online flexible",
+    title: "HirePro México | Trabajo online flexible",
     description:
-      "Descubre oportunidades flexibles de trabajo online en Colombia. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
+      "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
   },
 
-  Co004: {
-    slug: "Co004",
+  Mx004: {
+    slug: "Mx004",
     pixelId: "2054700951850488",
-    title: "HirePro Colombia | Trabajo online flexible",
+    title: "HirePro México | Trabajo online flexible",
     description:
-      "Descubre oportunidades flexibles de trabajo online en Colombia. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
+      "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
   },
 };
 
@@ -86,8 +86,8 @@ export function metadataForLanding(config: LandingConfig): Metadata {
       title: config.title,
       description: config.description,
       url,
-      siteName: "HirePro Colombia",
-      locale: "es_CO",
+      siteName: "HirePro México",
+      locale: "es_MX",
       type: "website",
 
       ...(config.ogImage

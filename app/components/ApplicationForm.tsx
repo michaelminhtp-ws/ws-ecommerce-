@@ -9,12 +9,12 @@ const BOT_USERNAME =
 
 const COUNTRIES = [
   // Main market / Spanish-speaking LATAM first
+  { iso: "mx", name: "México", dial: "+52", flag: "🇲🇽" },
   { iso: "co", name: "Colombia", dial: "+57", flag: "🇨🇴" },
   { iso: "ve", name: "Venezuela", dial: "+58", flag: "🇻🇪" },
   { iso: "ec", name: "Ecuador", dial: "+593", flag: "🇪🇨" },
   { iso: "pe", name: "Perú", dial: "+51", flag: "🇵🇪" },
   { iso: "pa", name: "Panamá", dial: "+507", flag: "🇵🇦" },
-  { iso: "mx", name: "México", dial: "+52", flag: "🇲🇽" },
   { iso: "ar", name: "Argentina", dial: "+54", flag: "🇦🇷" },
   { iso: "cl", name: "Chile", dial: "+56", flag: "🇨🇱" },
   { iso: "bo", name: "Bolivia", dial: "+591", flag: "🇧🇴" },
