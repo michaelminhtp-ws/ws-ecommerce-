@@ -22,7 +22,7 @@ export const LANDING_PAGES: Record<string, LandingConfig> = {
 
   Co002: {
     slug: "Co002",
-    pixelId: "1145438844674496",
+    pixelId: "2394212604652281",
     title: "HirePro México | Trabajo online flexible",
     description:
       "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
@@ -45,7 +45,7 @@ export const LANDING_PAGES: Record<string, LandingConfig> = {
   },
   Mx002: {
     slug: "Mx002",
-    pixelId: "1145438844674496",
+    pixelId: "2394212604652281",
     title: "HirePro México | Trabajo online flexible",
     description:
       "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
