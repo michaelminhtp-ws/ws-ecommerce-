@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import { CheckCircle2, Send } from "lucide-react";
 import { fbqTrack } from "@/lib/pixel";
+import { getPixelIdForPath } from "@/lib/landing-config";
 
 const BOT_USERNAME =
   process.env.NEXT_PUBLIC_BOT_USERNAME || "Asignr_aciondetarea_bot";
@@ -60,6 +61,48 @@ const isMobile = () =>
   );
 
 const onlyDigits = (value: string) => value.replace(/\D+/g, "");
+
+const readCookie = (name: string) => {
+  if (typeof document === "undefined") return "";
+  const prefix = `${name}=`;
+  const row = document.cookie
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(prefix));
+  return row ? decodeURIComponent(row.slice(prefix.length)) : "";
+};
+
+const getMetaTrackingContext = () => {
+  if (typeof window === "undefined") {
+    return {
+      sourcePath: "/",
+      metaPixelId: "",
+      fbp: "",
+      fbc: "",
+      eventSourceUrl: "",
+      clientUserAgent: "",
+    };
+  }
+
+  const sourcePath = window.location.pathname || "/";
+  const metaPixelId = getPixelIdForPath(sourcePath);
+  const fbp = readCookie("_fbp");
+  let fbc = readCookie("_fbc");
+
+  if (!fbc) {
+    const fbclid = new URLSearchParams(window.location.search).get("fbclid");
+    if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
+  }
+
+  return {
+    sourcePath,
+    metaPixelId,
+    fbp,
+    fbc,
+    eventSourceUrl: window.location.href,
+    clientUserAgent: navigator.userAgent || "",
+  };
+};
 
 const normalizeLocalPhone = (dial: string, value: string) => {
   const countryCode = onlyDigits(dial);
@@ -203,6 +246,27 @@ export default function ApplicationForm() {
         throw new Error(
           data?.error || "No se pudo guardar la solicitud."
         );
+      }
+
+      // Save the browser/ad context separately so the VPS can later send
+      // the final QualifiedLead CAPI event to the same Meta dataset.
+      // This is best-effort and never blocks the existing lead flow.
+      if (typeof data.id === "number") {
+        try {
+          const tracking = getMetaTrackingContext();
+          await fetch("/api/lead/source", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              leadId: data.id,
+              phoneE164: data.phone_e164 || phoneE164,
+              ...tracking,
+            }),
+            keepalive: true,
+          });
+        } catch {
+          // Existing Lead / CompleteRegistration / Telegram flow must continue.
+        }
       }
 
       // Keep the existing HirePro conversion flow:

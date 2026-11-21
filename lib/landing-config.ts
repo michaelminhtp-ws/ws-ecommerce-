@@ -19,6 +19,30 @@ export type LandingConfig = {
 //
 // Pixel IDs are public browser identifiers, not access tokens.
 export const LANDING_PAGES: Record<string, LandingConfig> = {
+
+  Co002: {
+    slug: "Co002",
+    pixelId: "1145438844674496",
+    title: "HirePro México | Trabajo online flexible",
+    description:
+      "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
+  },
+
+  Co003: {
+    slug: "Co003",
+    pixelId: "1115162561371096",
+    title: "HirePro México | Trabajo online flexible",
+    description:
+      "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
+  },
+
+  Co004: {
+    slug: "Co004",
+    pixelId: "2054700951850488",
+    title: "HirePro México | Trabajo online flexible",
+    description:
+      "Descubre oportunidades flexibles de trabajo online en México. Trabaja de forma remota y encuentra opciones de tiempo completo o medio tiempo.",
+  },
   Mx002: {
     slug: "Mx002",
     pixelId: "1145438844674496",
